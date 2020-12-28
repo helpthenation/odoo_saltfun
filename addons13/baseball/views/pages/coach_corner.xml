@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<template id="assets_editor" inherit_id="website.assets_editor" name="Blog Editor" groups="base.group_website_publisher">
+    <xpath expr="." position="inside">
+        <script type="text/javascript" src="/baseball/static/src/js/website_drill.editor.js"></script>
+    </xpath>
+</template>
+
+<template id="all_drills" name="Drills">
+    <t t-call="website.layout">
+        <div class="oe_structure">
+          <div class="container">
+
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                    <t t-call="website.pager" >
+                        <t t-set="classname">pull-right</t>
+                    </t>
+                    <h1 class="panel-title">Coaches' corner</h1>
+                </div>
+                <div class="panel-body">
+                  <div class="col-sm-8" t-ignore="True" id="main_column">
+                    <div t-if="drill" groups="base.group_website_designer">
+                        <t t-call="website.publish_management">
+                            <t t-set="object" t-value="drill"/>
+                            <t t-set="publish_edit" t-value="True"/>
+                        </t>
+                    </div>
+                    <t t-if="not drill" >
+                        <div t-foreach="drills" t-as="drill_id" class="mb16">
+                            <a t-att-href="'/coach/drill/%s' % slug(drill_id)">
+                                <h4 t-field="drill_id.name" class="mb4"></h4>
+                            </a>
+                        </div>
+                    </t>
+                    <div t-if="drill" class="mb16">
+
+                        <h4 t-field="drill.name" class="mb4"></h4>
+
+                        <p t-if="drill.material_ids">
+                          Material: <span t-esc="', '.join(drill.material_ids.mapped('name'))"/>
+                        </p>
+                        <p t-field="drill.description"/>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-lg-offset-1 col-sm-4" id="blog_right_column">
+                    <section t-if="skill_ids" class="mt32">
+                    <h4>Skills</h4>
+                    <ul class="nav nav-pills nav-stacked">
+                        <t t-foreach="skill_ids" t-as="skill_id">
+                            <li t-att-class="skill_id in (drill.skill_ids | skill) and 'active' or None" style="display: inline-block;">
+                                <t t-if="not category">
+                                    <a t-att-href="'/coach/drill/skill/%s' % slug(skill_id)">
+                                        <span t-field="skill_id.name"/>
+                                    </a>
+                                </t>
+                                <t t-if="category">
+                                    <a t-att-href="'/coach/drill/category/%s/skill/%s' % (slug(category), slug(skill_id))">
+                                        <span t-field="skill_id.name"/>
+                                    </a>
+                                </t>
+                            </li>
+                        </t>
+                    </ul>
+                    </section>
+                    <section t-if="category_ids" class="mt32">
+                    <h4>Categories</h4>
+                    <ul class="nav nav-pills nav-stacked">
+                        <t t-foreach="category_ids" t-as="category_id">
+                            <li t-att-class="category_id in (drill.category_ids | category) and 'active' or None">
+                                <t t-if="not skill">
+                                    <a t-att-href="'/coach/drill/category/%s' % slug(category_id)">
+                                        <span t-field="category_id.name"/>
+                                    </a>
+                                </t>
+                                <t t-if="skill">
+                                    <a t-att-href="'/coach/drill/category/%s/skill/%s' % (slug(category_id), slug(skill))">
+                                        <span t-field="category_id.name"/>
+                                    </a>
+                                </t>
+                            </li>
+                        </t>
+                    </ul>
+                    </section>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="oe_structure"/>
+    </t>
+</template>
+
+<!-- User Navbar : Add drill-->
+<template id="content_new_drill" inherit_id="website.user_navbar" groups="base.group_website_designer">
+    <xpath expr="//ul[@id='oe_systray']/li/ul[@class='dropdown-menu oe_content_menu']" position="inside">
+         <li><a href="#" data-action="new_drill">Nouveau Drill</a></li>
+    </xpath>
+</template>
+
+
+
+</data>
+</odoo>

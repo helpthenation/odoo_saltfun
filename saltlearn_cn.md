@@ -37,4 +37,46 @@ python odoo-bin -r odoo -w odoo -d immartian2021 -i l10n_generic_coa  --addons-p
 
 python odoo-bin -r odoo -w odoo -d immartian2021 -i chain_fbprophet  --addons-path=addons,odoo/addons,../addons_chain --stop-after-init  --without-demo true
 
+更新：
+
+python odoo-bin -r odoo -w odoo -d immartian2021 -u chain_fbprophet  --addons-path=addons,odoo/addons,../addons_chain --stop-after-init  --without-demo true
+
+
 ### 安装联系人
+
+### 遇见model cache has been invalidated,安装
+
+python odoo-bin -r odoo -w odoo -d immartian2021 -u ir_ui_view_cache_test  --addons-path=addons,odoo/addons,../odoo_saltfun/addons,../addons_chain --stop-after-init  --without-demo true
+
+ir_ui_view_cache_test
+
+## 问题
+
+INSERT INTO "public"."ir_attachment" ("id", "name", "description", "res_model", "res_field", "res_id", "company_id", "type", "url", "public", "access_token", "db_datas", "store_fname", "file_size", "checksum", "mimetype", "index_content", "create_uid", "create_date", "write_uid", "write_date", "original_id") VALUES ('27', 'res.company.scss', NULL, NULL, NULL, NULL, '1', 'binary', '/web/static/src/scss/asset_styles_company_report.scss', NULL, NULL, NULL, '75/751da1e706f06a22e3b1345f9ee7f393450e0250', '687', '751da1e706f06a22e3b1345f9ee7f393450e0250', 'text/scss', '
+
+
+
+
+                .o_company_1_layout {
+                font-family: ''Lato'';
+            
+                &.o_report_layout_standard {
+                    h2 {
+                        color: black;
+                    }
+                    #informations strong {
+                        color: black;
+                    }
+                    #total strong{
+                        color: black;
+                    }
+                    table {
+                        thead {
+                            color: black;
+                        }
+                    }
+                }
+            
+            }
+        
+    ', '1', '2020-12-19 20:24:53.71404', '1', '2020-12-19 20:24:53.71404', NULL);

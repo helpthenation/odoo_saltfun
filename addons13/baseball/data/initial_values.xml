@@ -1,0 +1,57 @@
+<odoo>
+    <data noupdate="1">
+        <record id="roles_president" model="baseball.roles">
+            <field name="name">President</field>
+            <field name="published" eval="1"/>
+            <field name="address_website" eval="0"/>
+            <field name="sequence" type="int">1</field>
+        </record>
+        <record id="roles_secretary" model="baseball.roles">
+            <field name="name">Secretary</field>
+            <field name="published" eval="1"/>
+            <field name="address_website" eval="1"/>
+            <field name="sequence" type="int">2</field>
+        </record>
+        <record id="roles_treasurer" model="baseball.roles">
+            <field name="name">Treasurer</field>
+            <field name="published" eval="1"/>
+            <field name="address_website" eval="0"/>
+            <field name="sequence" type="int">3</field>
+        </record>
+            <record id="roles_administration" model="baseball.roles">
+            <field name="name">Administrator</field>
+            <field name="published" eval="1"/>
+            <field name="address_website" eval="0"/>
+            <field name="sequence" type="int">4</field>
+        </record>
+        <record id="roles_members" model="baseball.roles">
+            <field name="name">Member</field>
+            <field name="published" eval="0"/>
+            <field name="address_website" eval="0"/>
+            <field name="sequence" type="int">10</field>
+        </record>
+
+        <record id="home_venue" model="baseball.venue">
+            <field name="name">Home venue</field>
+            <field name="name_from_federation" eval="[(0,0,{'name': 'Home venue'})]"/>
+        </record>
+
+<!--         <record id="product_template_jerseys" model="product.template">
+            <field name="name">Orange jerseys</field>
+        </record> 
+ -->
+
+<!--         <record id="product_template_jerseys" model="product.product">
+            <field name="name">Jersey</field>
+            <field name="categ_id" ref="product_category_5"/>
+            <field name="standard_price">14</field>
+            <field name="list_price">16.50</field>
+            <field name="type">consu</field>
+            <field name="uom_id" ref="product_uom_unit"/>
+            <field name="uom_po_id" ref="product_uom_unit"/>
+            <field name="default_code">A6678</field>
+            <field name="attribute_value_ids" eval="[(6,0,[ref('product.product_attribute_value_1')])]"/>
+        </record> -->
+
+    </data>
+</odoo>

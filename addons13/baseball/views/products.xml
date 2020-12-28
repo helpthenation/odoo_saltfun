@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="product_template_only_form_view">
+            <field name="name">product.template.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <page name="variants" position="after">
+                    <page name="jersey_ids" string="Jerseys">
+                        <field name="jersey_ids">
+                            <tree string="Jerseys">
+                                <field name="number"/>
+                                <field name="size"/>
+                                <field name="color" />
+                                <field name="state"/>
+                                <field name="member_id" context="{
+'form_view_ref':'baseball.view_baseball_members_form'}"/>
+
+                            </tree>
+                        </field>
+                    </page>
+                </page>
+            </field>
+        </record>
+
+
+        <record id="product_normal_form_view" model="ir.ui.view">
+            <field name="name">product.product.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page name="jersey_ids" string="Jerseys">
+                        <field name="jersey_ids">
+                            <tree string="Jerseys">
+                                <field name="number"/>
+                                <field name="state"/>
+                                <field name="member_id" context="{
+'form_view_ref':'baseball.view_baseball_members_form'}"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+        <record id="view_baseball_jerseysitem_form" model="ir.ui.view">
+            <field name="name">baseball.jerseysitem.form</field>
+            <field name="model">baseball.jerseysitem</field>
+            <field name="arch" type="xml">
+                <form>
+                <sheet>
+                    <group>
+                        <field name="number"/>
+                        <field name="size" domain="[('attribute_id','=',%(product_attribute_size)d)]"/>
+                        <field name="color" domain="[('attribute_id','=',%(product_attribute_color)d)]"/>
+                        <field name="state"/>
+                        <field name="member_id" context="{
+'form_view_ref':'baseball.view_baseball_members_form'}"/>
+                        <field name="season_id"/>
+
+                        <field name="comment"/>                        
+                        <field name="product_id" domain="[('attribute_value_ids','in',size),('attribute_value_ids','in',color)]"/>
+
+                    </group>                
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_baseball_jerseysitem_tree" model="ir.ui.view">
+            <field name="name">baseball.jerseysitem.tree</field>
+            <field name="model">baseball.jerseysitem</field>
+            <field name="arch" type="xml">
+                <tree editable="top">
+                    <field name="number"/>
+                    <field name="size" domain="[('attribute_id', '=', %(product_attribute_size)d)]"/>
+                    <field name="color" domain="[('attribute_id', '=', %(product_attribute_color)d)]"/>
+                    <field name="state"/>
+                    <field name="comment"/>
+                    <field name="firstname"/>
+                    <field name="lastname"/>
+                    <field name="member_id" context="{
+'form_view_ref':'baseball.view_baseball_members_form'}"/>
+                    <field name="season_id"/>
+
+                    <field name="gender"/>
+                    <field name="time_rent" attrs="{'invisible': [('state','not in', ['rented', 'rented_paid'])]}"/>
+                    <field name="team_ids" widget="many2many_tags"/>
+
+                </tree>
+            </field>
+        </record>
+
+
+       <record id="view_jerseysitem_filter" model="ir.ui.view">
+            <field name="name">baseball.jerseysitem.search</field>
+            <field name="model">baseball.jerseysitem</field>
+            <field name="arch" type="xml">
+                <search>
+                  <field name="member_id"/>
+                  <field name="firstname"/>
+                  <field name="lastname"/>
+                  <field name="number"/>
+                  <field name="color"/>
+                  <field name="size"/>
+                  <field name="time_rent"/>
+                  <field name="team_ids"/>
+                  <field name="comment"/>
+                  <field name="season_id"/>
+                  <filter string="Last active season" name="groupby_season" domain="[]" context="{'group_by':'season_id'}"/>
+                  <filter string="State" name="groupby_state" domain="[]" context="{'group_by':'state'}"/>
+                  <filter name="stock" string="Stock" domain="[('state', '=', 'stock')]"/>
+                  <filter name="sold" string="Sold" domain="[('state', '=', 'sold')]"/>
+                  <filter name="sold_paid" string="Sold and Paid" domain="[('state', '=', 'sold_paid')]"/>
+                  <filter name="rented" string="Rented" domain="[('state', '=', 'rented')]"/>
+                  <filter name="rented_paid" string="Rented and paid" domain="[('state', '=', 'rented_paid')]"/>
+                  <filter name="lost" string="Lost" domain="[('state', '=', 'lost')]"/>
+                  <filter name="borrow" string="Borrowed" domain="[('state', '=', 'borrow')]"/>
+                  <filter name="control" string="To Control" domain="[('state', '=', 'control')]"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="baseball_jerseys_list">
+            <field name="name">Jerseys</field>
+            <field name="res_model">baseball.jerseysitem</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+        <menuitem id="menu_jerseys" name="Jerseys"
+                  parent="menu_uniforms"
+                  action="baseball_jerseys_list"/>
+        <menuitem id="menu_products" name="Products"
+                  parent="menu_uniforms"
+                  action="product.product_template_action"/>
+
+	</data>
+</odoo>
+

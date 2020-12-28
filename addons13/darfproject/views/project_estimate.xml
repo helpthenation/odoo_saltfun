@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<record model="ir.ui.view" id="project_estimate_form_view">
+			<field name="name">project.estimate</field>
+			<field name="model">project.estimate</field>
+			<field name="arch" type="xml">
+				<form string="Project Estimation">
+					<group>
+						<field name="name" />
+						<field name="project_scoring">
+                         <tree>
+							 <field name="scoring_name" />
+							 <field name="estimating_project_id" invisible="1" />
+							 <field name="weight" />
+							 <field name="value" />	
+							 <field name="result_estimation" />
+                         </tree>
+						</field>
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="project_estimate_tree_view">
+			<field name="name">project.estimate</field>
+			<field name="model">project.estimate</field>
+				<field name="arch" type="xml">
+					<tree>
+						<field name="name" />
+						<field name="project_scoring" />
+					</tree>
+				</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="project_estimation_action">
+			<field name="name">Project Estimation</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">project.estimate</field>
+			<field name="view_mode">tree,form,pivot,graph</field>
+			<field name="view_id" ref="darfproject.project_estimate_tree_view" />
+		</record>
+
+		<menuitem
+            id="project_estimate_menu"
+            name="Project Estimation"
+            web_icon="darfproject,static/description/icon.png"
+            sequence="7"/>
+		<menuitem
+            id="project_estimate_menu_list"
+            name="Project for estimation"
+            parent = "darfproject.project_estimate_menu"
+            action="project_estimation_action"
+            sequence="7"/>
+	</data>
+</odoo>

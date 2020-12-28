@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+
+        <record id="view_baseball_venue_tree" model="ir.ui.view">
+            <field name="name">baseball.venue.tree</field>
+            <field name="model">baseball.venue</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Venues">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_baseball_venue_form" model="ir.ui.view">
+            <field name="name">baseball.venue.form</field>
+            <field name="model">baseball.venue</field>
+            <field name="arch" type="xml">
+                <form string="Venue">
+                <sheet>
+                    <div>
+                        <h1>
+                            <field name="name" placeholder="Name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name_from_federation" widget="many2many_tags"/>
+                            <field name="officials_needed"/>
+                            <field name="always_show_on_website"/>
+                            <label for="street" string="Address"/>
+                            <div>
+                                <field name="street" placeholder="Street..." />
+                                <field name="street2"/>
+                                <div class="address_format">
+                                    <field name="city" placeholder="City" style="width: 40%%" />
+                                    <field name="state_id" class="oe_no_button" placeholder="State" style="width: 37%%" options='{"no_open": True}' on_change="onchange_state(state_id)"/>
+                                    <field name="zip_code" placeholder="ZIP" style="width: 20%%"/>
+                                </div>
+                                <field name="country_id" placeholder="Country" class="oe_no_button" options='{"no_open": True, "no_create": True}'/>
+                            </div>
+                        </group>
+                    </group>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="baseball_venues">
+            <field name="name">venues</field>
+            <field name="res_model">baseball.venue</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+        <menuitem id="menu_venues_management" name="Venues"
+                  parent="menu_management"
+                  action="baseball_venues"
+                  sequence="20"
+                  />
+
+	</data>
+</odoo>
+

@@ -1,0 +1,2 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_chain_environment_checks","access.chain.environment.checks","model_chain_environment_checks","account.group_account_user",1,1,1,0

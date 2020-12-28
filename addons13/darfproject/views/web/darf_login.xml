@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="darflogin_css_js" inherit_id="website.login_layout">
+        <xpath expr="//div[hasclass('oe_website_login_container')]" position="after">
+            <script type="text/javascript" src="/darfproject/static/src/js/tinymce.min.js"></script>
+            <script type="text/javascript" src="/darfproject/static/src/js/jquery.treeselect.js"></script>
+            <script type="text/javascript" src="/darfproject/static/src/js/tags_var.js"></script>
+            <link rel="stylesheet" href="/darfproject/static/src/css/jquery.treeselect.css" type="text/css"/>
+            <script>tinymce.init({ selector:'#technology' });</script>
+            <script>tinymce.init({ selector:'#finance_description' });</script>
+            <script>tinymce.init({ selector:'#market' });</script>
+            <style>
+                #project_div {display:none;}
+                #investor_div {display:none;}
+                #use_ethereum_address_div {display:none;}
+                .oe_signup_form {max-width:40%;}
+                #wrapwrap {
+                position: relative;
+                display: table;
+                table-layout: fixed;
+                width: 100%;
+                height: 100%;
+                }
+                #metamask_notification_install {display:none;}
+                #metamask_notification_login {display:none;}
+
+            </style>
+
+
+            <script>
+                $(document).ready(function (value) {
+
+                var loadChildren = function(node, level) {
+                node = {id: "01", title: "Node", has_children: true, level: 1, children:[
+                <t t-foreach="categories" t-as="category">
+
+                    {id:'<t t-esc="category.id"/>',title:'<t t-esc="category.name"/>',
+                    has_children:true,level:2,children:[
+
+                    <t t-foreach="areas" t-as="area">
+
+                        <t t-if="area.category.id == category.id">
+                            {id:'area_<t t-esc="area.id"/>',title:'<t t-esc="area.name"/>',
+                            has_children:false,level:3,children:[]},
+                        </t>
+
+                    </t>
+
+                    ]},
+                </t>
+                ]};
+
+                return node;
+                };
+
+                var loadStage = function(node, level) {
+                node = {id: "01", title: "Node", has_children: true, level: 1, children:[
+                <t t-foreach="stage_invest" t-as="stage">
+
+                    {id:'stage_<t t-esc="stage.id"/>',title:'<t t-esc="stage.name"/>',
+                    has_children:false,level:2,children:[]},
+                </t>
+                ]};
+
+                return node;
+                };
+
+                $('div.chosentree').chosentree({
+                width: 500,
+                deepLoad: true,
+                showtree: true,
+                load: function(node, callback) {
+                setTimeout(function() {
+                callback(loadChildren(node, 0));
+                }, 1000);
+                }
+                });
+
+
+                $('div.stage_invest').chosentree({
+                width: 500,
+                deepLoad: true,
+                showtree: true,
+                load: function(node, callback) {
+                setTimeout(function() {
+                callback(loadStage(node, 0));
+                }, 1000);
+                }
+                });
+
+                $('.oe_signup_form').on('change', ':checkbox', function () {
+                if ($(this).is(':checked')) {
+                if ($(this).val() == 'project') {
+                $('#project_div').fadeIn('slow');
+                }
+                if ($(this).val() == 'investor') {
+
+
+                $('#investor_div').fadeIn('slow');
+                if (window.web3 &#38;&#38; web3.eth.coinbase != null) {
+                $('#investor_address').val(web3.eth.coinbase);
+                $('#use_ethereum_address_div').fadeIn('slow');
+                }
+                else
+                {
+                if (typeof web3 == "undefined") {
+                $('#metamask_notification_install').fadeIn('slow');
+                } else {
+                alert("Log in MetaMask !");
+                }
+                }
+
+                }
+
+                } else {
+
+                if($(this).val() == 'project') {
+                $('#project_div').fadeOut('slow');
+                }
+                if ($(this).val() == 'investor') {
+                $('#use_ethereum_address_div').fadeOut('slow');
+                $('#investor_div').fadeOut('slow');
+                }
+
+                }
+                });
+                var account = web3.eth.accounts[0];
+                var accountInterval = setInterval(function() {
+                if (web3.eth.accounts[0] !== account) {
+                account = web3.eth.accounts[0];
+                updateInterface();
+                }
+                }, 100);
+                function updateInterface() {
+                $('#investor_address').val(web3.eth.coinbase);
+
+                }
+                });
+            </script>
+        </xpath>
+
+    </template>
+    <template id="darflogin_signup" inherit_id="auth_signup.signup">
+        <xpath expr="//input[@name='token']" position="after">
+
+            <div class="field-name">
+                <p>Pleas select your role:</p>
+            </div>
+            <div class="form-group field-name">
+                <label for="investor" style="width:100px;">Investor</label>
+                <input id="investor" type="checkbox" name="investor" value="investor"/>
+            </div>
+            <div id="investor_div">
+                <div class="field-name">
+                    <p>Pleas select your area of investment:</p>
+                </div>
+
+                <div>
+                    <div class="chosentree"></div>
+                    <div>
+                        <br/>
+                    </div>
+                    <div>
+                        <p>Select stage of project:</p>
+                    </div>
+                    <div class="stage_invest"></div>
+                    <label for="investor_address">Ethereum address</label>
+                    <input id="investor_address" type="text" name="investor_address" class="form-control"/>
+                </div>
+            </div>
+            <div id="metamask_notification_install">
+                <p>You need to install metamask if you want to use this address for login in feature !</p>
+                <p>
+                    <a href="https://metamask.io/">METAMASK</a>
+                </p>
+            </div>
+            <div id="metamask_notification_login">
+                <p>You need to login in metamask if you want to use this address for login in feature !</p>
+            </div>
+            <div id="use_ethereum_address_div">
+                <label for="use_ethereum_address">Use this ethereum address for login in future?</label>
+                <input id="use_ethereum_address" type="checkbox" name="use_address_login" value="use_ethereum_address"
+                       checked="checked"/>
+            </div>
+            <div class="form-group field-name">
+                <label for="project" style="width:100px;">Project</label>
+                <input id="project" type="checkbox" name="project" value="project"/>
+            </div>
+
+            <div id="project_div" style="margin-top:40px;">
+                <label for="project_name" style="width:100%;">Project Name</label>
+                <input id="project_name" type="text" name="project_name"/>
+
+                <label for="market_size" style="width:100%;">Market Size (in $)</label>
+                <input id="market_size" type="number" name="market_size" class="form-control"/>
+
+                <label for="cagr" style="width:100%;">Compound Annual Growth Rate (CAGR)</label>
+                <input id="cagr" type="number" name="cagr" class="form-control"/>
+
+                <label for="planned_share_market" style="width:100%;">Planned share of the market</label>
+                <input id="planned_share_market" type="number" name="planned_share_market" class="form-control"/>
+
+                <label for="market" style="width:100%;">Market Description</label>
+                <textarea id="market" name="market" class="form-control">Market information !</textarea>
+
+                <label for="technology" style="width:100%;">Technology</label>
+                <textarea id="technology" name="technology" class="form-control">Technology general information !
+                </textarea>
+
+                <label for="total_investment" style="width:100%;">Total investment (in $)</label>
+                <input id="total_investment" type="number" name="total_investment" class="form-control"/>
+
+                <label for="finance_description" style="width:100%;">Finance description</label>
+                <textarea id="finance_description" name="finance_description" class="form-control">Finance description.
+                    From where do you plane to get money and so on !
+                </textarea>
+
+            </div>
+        </xpath>
+    </template>
+</odoo>
+
+	

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="custom-snippets" inherit_id="website.snippets">
+			<!-- CUSTOM SNIPPETS TAB -->
+			<xpath expr="//div[@id='snippet_effect']" position="after">
+				<div id="custom_snipets" class="tab-pane fade">
+				</div>
+			</xpath>
+		</template>
+
+	</data>
+</odoo>

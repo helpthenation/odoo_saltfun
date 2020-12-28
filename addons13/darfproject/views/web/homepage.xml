@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="homepage_projects" name="My HomePage" inherit_id="website.homepage">
+<xpath expr="//div[@id='wrap']" position="replace" >
+<div id="wrap">
+                 <div class="container">
+                 <div class="text-center mt64" name="mail_button">
+                 <a t-attf-href="/web/signup" class="btn btn-primary" id="o_contact_mail">Send your project</a>
+                 </div>
+						<div class="row">                   
+							<t t-foreach="projects" t-as="project" >
+							<t t-if="project['publish_on_web'] == True">
+								<div class="col-md-4">
+									<t t-set="id" t-value="project['project'].id" />
+									<t t-set="name" t-value="project['project'].name" />
+									<h3><span><t t-esc="name"/></span></h3>
+									<div  class="thumbnail">
+								<!-- 	 <a t-attf-href="/my/home/invest/{{id}}">
+ <div t-field="project['project'].image" t-options="{'widget': 'image', 'class': 'img-rounded shadow o_alternative_product' }" />
+
+                        </a> -->
+						 				<a  t-attf-href="/my/home/invest/{{id}}">
+										 <img class="img-fluid rounded mb-3 mb-md-0 image_project" t-att-src="website.image_url(project['project'],'image')" />
+										</a>
+									</div>
+									<div class="caption">
+										<div class="row">
+										<div class="col-md-6">
+										   <a class="btn btn-danger" t-attf-href="/web#view_type=kanban&amp;model=project.task&amp;action=134&amp;active_id={{id}}">Add User Story</a>
+<!--                                             <&#45;&#45;   /my/home/invest/ &ndash;&gt;-->
+										</div>
+										<div class="col-md-6">
+										   <a t-attf-href="/my/home/project/{{id}}">READ MORE...</a>
+										</div>
+										</div>
+										<p>
+										<span class="small_head">Description: </span><span><t t-esc="project['project'].description" /></span><br/> 
+										<span class="small_head">Token: </span><span><t t-esc="project['project'].project_token_name" /></span><br/>
+										<span class="small_head">Token amount: </span><span><t t-esc="project['project'].token_amount" /></span><br/> 
+										<!--  <span class="small_head">Your tokens: </span><span><t t-esc="project['project_token_amount']" /></span> -->
+										</p>
+									</div>
+								
+								</div>
+								</t>
+						   </t>					
+					</div>
+				</div>
+</div>  
+</xpath>
+</template>
+</odoo>

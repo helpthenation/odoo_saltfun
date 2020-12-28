@@ -1,0 +1,70 @@
+<section class="oe_container">
+	<div class="oe_row oe_spaced">
+		<div class="oe_span12">
+			<h2 class="oe_slogan">Persistent and propagated view cache test</h2>
+			<p class="oe_mt32">
+				This module allow you to test if you will benefit from <a
+					href="https://apps.odoo.com/apps/modules/13.0/ir_ui_view_cache/">ir_ui_view_cache
+					module.</a><br /> Simply install it and observer odoo log files<br />
+				<br /> Each time you will get speed improvement - this module will
+				write: Probably would have saved 123ms<br /> <br /> For test
+				environment this module produced total over 9 hours over the 2 week
+				period.<br /> This will wary for every other case - thats the test
+				module is for.
+
+			</p>
+
+			<p>
+			<pre>
+INFO dbname odoo.modules.registry: Invalidating all model caches after database signaling. 
+INFO dbname odoo.addons.base.models.ir_http: Generating routing map for key 1 
+DEBUG dbname odoo.addons.website.models.ir_http: _generate_routing_rules for website: 1 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 23.060840ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 4.837959ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 15.005720ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 5.518526ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 5.517625ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 6.493229ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 5.487216ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 4.778898ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 65.298208ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 15.542800ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 4.772277ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 5.114042ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 28.350569ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 15.366563ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 4.442162ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 45.015890ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 26.717880ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 5.011241ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 9.260984ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 14.371570ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 4.345682ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 6.238257ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 4.353916ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 13.097418ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 20.665038ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 4.825806ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 5.804739ms 
+INFO dbname odoo.addons.ir_ui_view_cache_test.models.ir_ui_view: Probably would have saved 7.069604ms 
+INFO dbname odoo.modules.registry: Reloading the model registry after database signaling. 
+			</pre>
+			<br /> In this example the /shop was requested with simple
+			e-commerce install with demo data<br /> Over 376ms was wasted to
+			compile views. Now multiply this with the amount of workers you have.
+			</p>
+
+			<p>
+				<img src="screenshot.png" />
+				<br />After installing this module you will have menu "View Cache Test" in Settings menu.
+				<br />Try to group it by Access Time (Daily) 
+			</p>
+
+			<p>
+				<br />
+				<br />If you need support: contact us at
+				support@advancedaccountancy.org
+			</p>
+		</div>
+	</div>
+</section>

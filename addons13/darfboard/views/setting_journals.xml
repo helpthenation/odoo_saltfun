@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="setting_journals_view">
+			<field name="name">setting.journals</field>
+			<field name="model">setting.journals</field>
+			<field name="arch" type="xml">
+				<form string="Setting for DarfBoard">
+					<sheet>
+						<group>
+						   
+						    <field name="name" string="Report name" />
+						    <field name="ethereum_pk"  string="Ethereum contract address"/>
+						    <field name="ethereum_address"/>
+						    <field name="ethereum_node_address"  />
+						    <field name="gas_limit"  />
+						    <field name="gas_spent"  />
+							<field name="list_of_parameters">
+							<tree>
+                              <field name="name" string="Name of parameter"/>
+                              <field name="journal_list" widget="many2many_tag"/>							
+							</tree>
+							</field>
+						</group>
+						<button name="sand_report" type="object" string="Sand Report"/>
+						<notebook colspan="2">
+						<page string="Set date of Synchronization">
+						<group>
+						<field name="send_period"/>
+	                    <field name="week_day" attrs="{'invisible':['|',('send_period','!=','week'),('send_period','=','Period')]}"/>
+	                    <field name="send_time" widget="float_time" attrs="{'invisible':[('send_period','=','Period')]}"/>
+	                    <field name="send_date" attrs="{'invisible':['|',('send_period','!=','month'),('send_period','=','Period')]}"/>
+	                    <field name="time_period" attrs="{'invisible':[('send_period','!=','Period')]}"/>
+	                    </group>
+						</page>
+						<page string="XML for Synchronization">
+						<field name="xml_for_synchronization" />
+						</page>
+						</notebook>
+					</sheet>
+					
+				</form>
+			</field>
+		</record>
+		<record model="ir.ui.view" id="setting_journals_tree_view">
+			<field name="name">setting.journals</field>
+			<field name="model">setting.journals</field>
+			<field name="arch" type="xml">
+				<tree string="Report Setting">
+				           <field name="name"/>
+        				   <field name="ethereum_pk"/>
+        				   <field name="last_send_date"/>
+				</tree>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="setting_journals_action">
+			<field name="name">Setting Report DarfBoard</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">setting.journals</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="darfboard.setting_journals_tree_view" />
+		</record>
+		<record model="ir.ui.view" id="setting_journals_list_view">
+			<field name="name">list.of.parameters</field>
+			<field name="model">list.of.parameters</field>
+			<field name="arch" type="xml">
+				<form string="Setting for Journals">
+				<group>
+				 <field name="name" string="Parameter name"/>
+				 <field name="journal_list" widget="many2many_tags" string="Accounting Journals"/> 
+				</group>
+				</form>
+			</field>
+		</record>
+		<menuitem name="Setting DarfBoard" id="setting_journal_page_menu"
+			parent="crm.crm_menu_sales" action="setting_journals_action"
+			sequence="20" />
+	</data>
+</odoo>

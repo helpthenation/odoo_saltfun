@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+<!--         <record id="current_season" model="baseball.season">
+            <field name="name">current season</field>
+            <field name="is_current" eval="True"/>
+        </record> -->
+
+        <record id="partner_frbbs_official" model="res.partner">
+            <field name="name">FRBBS official</field>
+            <field name="active" eval="False"/>
+        </record>
+
+        <record id="base.public_user" model="res.users">
+            <field name="current_partner_id" ref="base.public_partner"/>
+        </record>
+
+    </data>
+</odoo>

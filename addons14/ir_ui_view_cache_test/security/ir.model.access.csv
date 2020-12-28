@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ir_ui_view_cache_test_public,ir.ui.view.cache.test.public,model_ir_ui_view_cache_test,,1,0,0,0

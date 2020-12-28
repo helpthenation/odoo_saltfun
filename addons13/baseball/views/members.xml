@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+<!--  FIXME
+        <record id="view_baseball_members_kanban" model="ir.ui.view">
+            <field name="name">members.kanban</field>
+            <field name="model">res.partner</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml" >
+                <kanban class="o_res_partner_kanban">
+                    <field name="color"/>
+                    <field name="display_name"/>
+                    <field name="title"/>
+                    <field name="email"/>
+                    <field name="parent_id"/>
+                    <field name="is_company"/>
+                    <field name="function"/>
+                    <field name="phone"/>
+                    <field name="street"/>
+                    <field name="street2"/>
+                    <field name="zip"/>
+                    <field name="city"/>
+                    <field name="country_id"/>
+                    <field name="mobile"/>
+                    <field name="team_ids"/>
+                    <field name="image"/>
+                    <field name="type"/>
+                    <field name="count_jerseys"/>
+                    <field name="debt"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)}  oe_kanban_global_click o_res_partner_kanban">
+                                <div class="o_kanban_tags_section oe_kanban_partner_categories">
+                                    <span class="oe_kanban_list_many2many">
+                                        <field name="team_ids"/>
+                                    </span>
+                                </div>
+                                <div class="o_kanban_image">
+                                    <t t-if="record.image.raw_value">
+                                        <img t-att-src="kanban_image('res.partner', 'image_small', record.id.value)"/>
+                                    </t>
+                                    <t t-if="!record.image.raw_value">
+                                        <t t-if="record.type.raw_value === 'delivery'">
+                                            <img t-att-src="_s + &quot;/base/static/src/img/truck.png&quot;" class="o_kanban_image oe_kanban_avatar_smallbox"/>
+                                        </t>
+                                        <t t-if="record.type.raw_value === 'invoice'">
+                                            <img t-att-src="_s + &quot;/base/static/src/img/money.png&quot;" class="o_kanban_image oe_kanban_avatar_smallbox"/>
+                                         </t>
+                                        <t t-if="record.type.raw_value != 'invoice' &amp;&amp; record.type.raw_value != 'delivery'">
+                                            <t t-if="record.is_company.raw_value === true">
+                                                <img t-att-src="_s + &quot;/base/static/src/img/company_image.png&quot;"/>
+                                            </t>
+                                            <t t-if="record.is_company.raw_value === false">
+                                                <img t-att-src="_s + &quot;/base/static/src/img/avatar.png&quot;"/>
+                                            </t>
+                                        </t>
+                                    </t>
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <strong class="oe_partner_heading"><field name="display_name"/></strong>
+                                    <ul>
+                                        <li t-if="record.parent_id.raw_value and !record.function.raw_value"><field name="parent_id"/></li>
+                                        <li t-if="!record.parent_id.raw_value and record.function.raw_value"><field name="function"/></li>
+                                        <li t-if="record.parent_id.raw_value and record.function.raw_value"><field name="function"/> at <field name="parent_id"/></li>
+                                        <li t-if="record.city.raw_value"><field name="city"/></li>
+                                        <li t-if="record.email.raw_value" class="o_text_overflow"><field name="email"/></li>
+                                    </ul>
+                                    <div class="oe_kanban_partner_links">
+                                        <span t-if="record.debt.value&gt;0" class="badge"><i class="fa fa-fw fa-money"/><t t-esc="record.debt.value"/></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </t>
+                    </templates>
+                </kanban>
+            
+            </field>
+        </record> -->
+
+
+        <record id="view_baseball_members_tree" model="ir.ui.view">
+            <field name="name">members.tree</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml" >
+                <xpath expr="//field[@name='display_name']" position="after">
+                    <field name="lastname"/>
+                    <field name="firstname"/>
+                </xpath>
+                <xpath expr="//field[@name='vat']" position="after">
+                    <field name="baseball_category_ids" optional="hidden" widget="many2many_tags"/>
+                    <field name="team_ids" optional="hidden" widget="many2many_tags"/>
+                    <field name="club_role_ids" optional="hidden" widget="many2many_tags"/>
+                    <field name="debt"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="licence_number" optional="hidden"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="base.view_partner_form" model="ir.ui.view">
+            <field name="priority">1</field>
+        </record>
+
+        <record id="view_baseball_members_form" model="ir.ui.view">
+            <field name="name">members.form</field>
+            <field name="model">res.partner</field>
+            <field name="priority">99</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="before">
+                    <header>
+                        <button name="create_user" type="object" string="Create user and send invitation" attrs="{'invisible': ['|', ('email','=',False), ('is_user', '=', True)]}"/>
+                        <field name="is_user" invisible="1"/>
+                    </header>
+                </xpath>
+                <xpath expr="//field[@name='name']/.." position="attributes">
+                    <attribute name="class">oe_read_only</attribute>
+                </xpath>
+                <xpath expr="//field[@name='name']/.." position="after">
+                    <h1 class="oe_edit_only">
+                        <field name="firstname" placeholder="Firstname"/>
+                        <field name="lastname" placeholder="Lastname"/>
+                    </h1>
+                </xpath>
+                <xpath expr="//field[@name='type']" position="before">
+                    <field name="baseball_category_ids" widget="many2many_tags" attrs="{'invisible': [('is_player','=',False)]}"/>
+                    <field name="team_ids" widget="many2many_tags" domain="[('is_opponent','=',False)]" attrs="{'invisible': [('is_player','=',False)]}"/>
+                    <field name="nationality_id"/>
+                </xpath>
+                <xpath expr="//field[@name='function']" position="replace"/>
+                <xpath expr="//field[@name='title']" position="replace"/>
+                <xpath expr="//field[@name='mobile']" position="after">
+                    <field name="mobile2"/>
+                </xpath>
+                <xpath expr="//field[@name='property_payment_term_id']" position="replace"/>
+                <xpath expr="//field[@name='property_account_position_id']" position="replace"/>
+                <xpath expr="//field[@name='website']" position="replace">
+                    <field name="email2"/>
+                    <field name="birthdate"/>
+                    <field name="gender"/>
+                    <field name="is_player"/>
+                    <field name="club_role_ids" widget="many2many_tags"  placeholder="e.g. Member, Secretary"/>
+                    <field name="active"  invisible="1"/>
+                    <field name="is_active_current_season"/>
+                    <field name="is_in_order" invisible="1"/>
+                    <field name="licence_number"/>
+                    <field name="ads_authorize"/>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <page name="baseball_page" string="Baseball">
+                        <group col="3">
+                            <group colspan="1">
+                                <field name="jerseys_ids"  nolabel="1" context="{'form_view_ref':'baseball.view_baseball_jerseysitem_form', 'default_member_id': id}">
+                                    <tree>
+                                        <field name="number"/>
+                                        <field name="size"/>
+                                        <field name="color"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group colspan="2">
+                                <field name="season_ids"  nolabel="1" >
+                                    <tree editable="top">
+                                        <field name="id" invisible="1"/>
+                                        <field name="season_id" required="1" options="{'no_create_edit': True}"/>
+                                        <field name="is_registered"/>
+                                        <field name="is_certificate"/>
+                                        <button class="oe_read_only" type="object" name="action_download_certificate"  string="Download Certificate" icon="fa-download" attrs="{'invisible': ['|', ('certificate_id','=',False), ('is_certificate', '=', False)]}"/>
+                                        <field class="oe_edit_only" name="certificate_id" context="{'default_res_id': id, 'default_res_model': 'baseball.registration'}" domain="[('res_model', '=', 'baseball.registration'), '|', ('res_id', '=', 0), ('res_id', '=', id)]"/>
+                                        <field name="category_id" required="1"/>
+                                        <field name="fee_to_pay"/>
+                                        <field name="fee_paid"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="payment_date"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </group>
+                    </page>
+                    <page name="payment" string="Payments">
+                        <field name="payment_ids" context="{'default_partner_type': 'customer', 'default_payment_type': 'inbound'}">
+                            <tree editable="top">
+                                <field name="membership_id"/>
+                                <field name="payment_type"/>
+                                <field name="amount"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="payment_date"/>
+                                <field name="communication"/>
+                                <field name="state"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page name="family" string="Family" >
+                        <group>
+                            <field name="parent_user_id" context="{'form_view_ref':'baseball.view_baseball_members_form'}"/>
+                        </group>
+                        <label for="child_partner_ids"/>
+                        <field name="child_partner_ids" widget="many2many" context="{'form_view_ref':'baseball.view_baseball_members_form'}">
+                            <tree>
+                                <field name="name"/>
+
+                                <field name="team_ids" widget="many2many_tags"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page name="tab" string="Tab" groups="baseball.group_tab_read">
+                        <group>
+                            <field name="tab_debt"/>
+                        </group>
+                        <field name="tab_ids">
+                            <tree editable="top">
+                                <field name="to_pay"/>
+                                <field name="paid"/>
+                                <field name="date"/>
+                                <field name="comment"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+       <record id="view_res_partner_filter" model="ir.ui.view">
+            <field name="name">members.search</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='email']" position="attributes">
+                  <attribute name="filter_domain">['|', ('email', 'ilike', self), ('email2', 'ilike', self)]</attribute>
+                </xpath>
+                <xpath expr="//field[@name='phone']" position="attributes">
+                  <attribute name="filter_domain">['|','|', ('phone', 'ilike', self), ('mobile', 'ilike', self), ('mobile2', 'ilike', self)]</attribute>
+                </xpath>
+                <xpath expr="//field[@name='email']" position="after">
+                  <field name="baseball_category_ids"/>
+                  <field name="team_ids"/>
+                  <field name="season_id"/>
+                  <field name="club_role_ids"/>
+                </xpath>
+                <xpath expr="//filter[@name='type_person']" position="before">
+                    <filter name="current_members" string="Current Members" domain="[('is_active_current_season', '=', True)]"/>
+                    <filter name="former_members" string="Former members" domain="[('is_active_current_season', '=', False)]"/>
+                    <filter name="indebted_members" string="Indebted members" domain="[('debt', '>', 0)]"/>
+                    <filter string="In order" name="groupby_in_order" domain="[]" context="{'group_by':'is_in_order'}"/>
+                    <filter string="Licensed" name="groupby_license" domain="[]" context="{'group_by':'is_registered'}"/>
+                    <filter string="Certificate" name="groupby_certificate" domain="[]" context="{'group_by':'is_certificate'}"/>
+                    <filter string="Player" name="groupby_is_player" domain="[]" context="{'group_by':'is_player'}"/>
+                    <filter string="City" name="groupby_city" domain="[]" context="{'group_by':'city'}"/>
+                    <filter string="Gender" name="groupby_gender" domain="[]" context="{'group_by':'gender'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- <record id="view_member_form_fee_readonly" model="ir.ui.view">
+            <field name="name">res.partner.form.readonly</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="view_baseball_members_form"/>
+            <field name="groups_id" eval="[(6, 0, [ref('group_team_manager') ])]"/>
+            <field name="arch" type="xml">
+                <field name="fee_paid" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="fee_to_pay" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="payment_date" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+            </field>
+        </record> -->
+
+        <!-- <record id="view_member_tree_fee_readonly" model="ir.ui.view">
+            <field name="name">res.partner.tree.readonly</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="view_baseball_members_tree"/>
+            <field name="groups_id" eval="[(6, 0, [ref('group_team_manager') ])]"/>
+            <field name="arch" type="xml">
+                <field name="fee_paid" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="fee_to_pay" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+            </field>
+        </record> -->
+
+        <record model="ir.actions.act_window" id="baseball_list_members">
+            <field name="name">Members</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <!-- <field name="search_view_id" ref="baseball.view_res_partner_filter"/> -->
+            <field name="context">{'search_default_current_members':1}</field>
+        </record>
+
+
+
+        <menuitem id="menu_members_management" name="Members"
+                  parent="menu_management"
+                  action="baseball_list_members"/>
+
+	</data>
+</odoo>
+

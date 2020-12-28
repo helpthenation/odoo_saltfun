@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="project_project_form_view">
+			<field name="name">project.project</field>
+			<field name="model">project.project</field>
+			<field name="inherit_id" ref="project.edit_project"/>
+			<field name="arch" type="xml">
+			  <xpath expr="//sheet/notebook/page[1]" position="after">
+			    <page string="Project's token">
+					<group>
+						<field name="project_token" />
+						<field name="moderator_check" invisible="1"/>
+						<field name="project_token_name" />
+						<field name="token_amount" />
+						<field name="description" />
+						<field name='image' widget="image" class="oe_avatar" />
+						<field name='project_address' />
+					</group>
+			    </page> 
+			    <page string="Project Setting">
+					<group>
+						<field name="open_close_for_investment" />
+						<field name="forms_of_investment" />
+						<field name="exchange_price" />
+						<field name="investment_condition" />
+						<field name="buy_back_address" />
+						<field name="term_and_condition" widget="html" />
+						<field name="areas_of_investment" />
+					</group>
+			    </page>
+			    <page string="Market">
+					<group>
+						<field name="market" widget="html"/>
+						<field name="cagr" />
+						<field name="market_size" />
+						<field name="planned_share_market" />
+					</group>
+			    </page>
+			    <page string="Finance">
+					<group>
+						<field name="tokens_price" />
+						<field name="exchange_price" />
+						<field name="exchange_rate" />
+						<field name="total_investment" />
+						<field name="finance_description" widget="html"/>
+					</group>
+			    </page>
+			    <page string="Technology">
+					<group>
+						<field name="technology" widget="html"/>
+					</group>
+			    </page>
+			    <page string="Project Team">
+					<group>
+						<field name="project_team">
+						<tree editable="bottom">
+							<field name="team_mamber" />
+						</tree>
+						</field>
+					</group>
+			    </page>
+			    <page string="Moderation" attrs="{'invisible':[('moderator_check','=',False)]}">
+			    <group>
+			        <field name="publish_on_web" />
+			    </group>
+			    </page>
+			    <page string="Round of investment">
+					<group>
+						<field name="round_of_investment">
+						<tree editable="bottom">
+						        <field name="name_of_round" />
+								<field name="start_date" />
+								<field name="end_date" />
+								<field name="min_amount" />
+								<field name="max_amount" />
+							</tree>
+						</field>
+					</group>
+			    </page>
+			  </xpath> 
+			</field>
+
+		</record>
+	</data>
+</odoo>

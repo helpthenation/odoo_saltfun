@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="registration_stage_draft" model="baseball.registration.stage">
+            <field name="name">New</field>
+            <field eval="False" name="fold" />
+            <field eval="True" name="discard_stage" />
+            <field eval="True" name="is_default" />
+            <field name="sequence">0</field>
+        </record>
+
+        <record id="registration_stage_progress" model="baseball.registration.stage">
+            <field name="name">In progress</field>
+            <field eval="False" name="fold" />
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="registration_stage_to_send" model="baseball.registration.stage">
+            <field name="name">To send</field>
+            <field eval="False" name="fold" />
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="registration_stage_validated" model="baseball.registration.stage">
+            <field name="name">Validated</field>
+            <field eval="False" name="fold" />
+            <field name="sequence">30</field>
+        </record>
+
+        <record id="registration_stage_cancelled" model="baseball.registration.stage">
+            <field name="name">Cancelled</field>
+            <field eval="True" name="fold" />
+            <field eval="True" name="discard_stage" />
+            <field name="sequence">40</field>
+        </record>
+
+    </data>
+</odoo>

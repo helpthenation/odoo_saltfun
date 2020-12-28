@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="area_form_category_view">
+			<field name="name">area.of.investment.category</field>
+			<field name="model">area.of.investment.category</field>
+			<field name="arch" type="xml">
+			<form>
+			<group>
+				<field name="name" />
+			</group>
+			</form>
+			</field>
+		</record>
+		<record model="ir.ui.view" id="area_tree_category_view">
+			<field name="name">area.of.investment.category</field>
+			<field name="model">area.of.investment.category</field>
+			<field name="arch" type="xml">
+			<tree>
+				<field name="name" />
+			</tree>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="area_category_action">
+			<field name="name">Area of investment category</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">area.of.investment.category</field>
+<!--			<field name="view_type">form</field>-->
+			<field name="view_mode">tree,form,pivot,graph</field>
+			<field name="view_id" ref="darfproject.area_tree_category_view" />
+		</record>
+
+		<menuitem
+            id="area_investment_category_manu"
+            name="Area of Investment Category"
+            parent = "darfproject.project_estimate_menu"
+            action="area_category_action"
+            sequence="7"/>
+
+	</data>
+</odoo>

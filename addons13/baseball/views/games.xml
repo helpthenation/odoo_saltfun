@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+
+        <record id="view_baseball_game_tree" model="ir.ui.view">
+            <field name="name">baseball.game.tree</field>
+            <field name="model">baseball.game</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+
+                <tree string="Games">
+                    <field name="game_number"/>
+                    <field name="start_time"/>
+                    <field name="division"/>
+                    <field name="home_team"/>
+                    <field name="score_home"/>
+                    <field name="away_team"/>
+                    <field name="venue"/>
+                    <field name="score_away"/>
+                    <field name="umpire_ids" widget="many2many_tags"/>
+                    <field name="scorer_ids" widget="many2many_tags"/>
+
+                </tree>
+            </field>
+        </record>
+
+
+
+
+        <record id="view_baseball_game_form" model="ir.ui.view">
+            <field name="name">baseball.game.form</field>
+            <field name="model">baseball.game</field>
+            <field name="arch" type="xml">
+                <form string="Games">
+                <sheet>
+                    <div class="oe_title oe_left">
+                        <h1>
+                            <field name="game_number" placeholder="Game number"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="game_type"/>
+                        <field name="start_time"/>
+                        <field name="end_time"/>
+                        <field name="division" attrs="{'invisible': [('game_type','=', 'tournament')]}"/>
+                        <field name="scorer_ids" widget="many2many_tags" attrs="{'invisible': ['|',('game_type','=', 'tournament'),('game_type','=', 'friendly')]}" context="{
+'form_view_ref':'baseball.view_baseball_members_form'}"/>
+                        <field name="umpire_ids" widget="many2many_tags" attrs="{'invisible': ['|',('game_type','=', 'tournament'),('game_type','=', 'friendly')]}" context="{
+'form_view_ref':'baseball.view_baseball_members_form'}"/>
+                        <field name="venue"/>
+                        <group>
+                            <field name="home_team"/>
+                            <field name="score_home" attrs="{'invisible': ['|',('game_type','=', 'tournament'),('game_type','=', 'friendly')]}"/>
+                        </group>
+                        <group>
+                            <field name="away_team" attrs="{'invisible': [('game_type','=', 'tournament')]}"/>
+                            <field name="score_away" attrs="{'invisible': ['|',('game_type','=', 'tournament'),('game_type','=', 'friendly')]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group >
+                        	<label for="present_players_ids" string="Attendees"/>
+							<newline/>
+                            <field name="present_players_ids" nolabel="1" context="{
+'form_view_ref':'baseball.view_baseball_members_form'}">
+                                <tree>
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+							<label for="absent_players_ids" string="Absentees" />
+							<newline/>
+                            <field name="absent_players_ids" nolabel="1" context="{
+'form_view_ref':'baseball.view_baseball_members_form'}">
+                                <tree>
+									<field name="name"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </group>
+<!--                     <field name="invitation_ids">
+                        <tree editable="top">
+                            <field name="partner_id"/>
+                            <field name="game_id"/>
+                            <field name="state"/>
+                            <field name="token"/>
+                        </tree>
+                    </field> -->
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+
+    <record model="ir.ui.view" id="view_baseball_game_calendar">
+        <field name="name">baseball.game.calendar</field>
+        <field name="model">baseball.game</field>
+        <field name="arch" type="xml">
+            <calendar string="Session Calendar"
+                      date_start="start_time"
+                      date_stop="end_time"
+                      color="division">
+                <field name="game_number"/>
+                <field name="away_team" />
+                <field name="home_team" />
+            </calendar>
+        </field>
+    </record>
+
+
+       <record id="view_games_filter" model="ir.ui.view">
+            <field name="name">baseball.game.search</field>
+            <field name="model">baseball.game</field>
+            <field name="arch" type="xml">
+                <search>
+                  <field name="game_number"/>
+                  <field name="start_time"/>
+                  <field name="division"/>
+                  <field name="venue"/>
+                  <filter name="official" string="Official" domain="[('game_type', '=', 'competition'),('period', '=', 'current')]"/>
+                  <filter name="friendly" string="Friendly" domain="[('game_type', '=', 'friendly'),('period', '=', 'current')]"/>
+                  <filter name="club_teams" string="Club Teams" domain="[('is_opponent', '=', False),('period', '=', 'current')]"/>
+                  <separator/>
+                  <filter name="official_past" string="Official (past seasons)" domain="[('game_type', '=', 'competition'),('period', '=', 'current')]"/>
+                  <filter name="friendly_past" string="Friendly (past seasons)" domain="[('game_type', '=', 'friendly'),('period', '=', 'current')]"/>
+                  <filter name="club_teams_past" string="Club Teams (past seasons)" domain="[('is_opponent', '=', False),('period', '=', 'current')]"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="baseball_list_games">
+            <field name="name">Games</field>
+            <field name="res_model">baseball.game</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="search_view_id" ref="view_games_filter"/>
+            <field name="context">{'search_default_club_teams':1, 'game_type':'friendly'}</field>
+            <field name="domain">['|',('game_type','=','competition'),('game_type','=','friendly')]</field>
+            <field name="view_ids" eval="[
+                (5, 0, 0),
+                (0, 0, {
+                    'view_mode': 'tree',
+                    'view_id': ref('view_baseball_game_tree'),
+                    }),
+                (0, 0, {
+                    'view_mode': 'form',
+                    'view_id': ref('view_baseball_game_form'),
+                    }),
+                ]"/>
+        </record>
+
+
+
+        <menuitem id="menu_games" name="Games"
+                  parent="menu_competition"
+                  action="baseball_list_games"/>
+
+	</data>
+</odoo>
+

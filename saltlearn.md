@@ -13,3 +13,15 @@ to be a recordset.
 The function `aggregate` was solely being used by `api.one` thus it has
 also been removed since there doesn't seem to be any other use for it
 thus far.
+
+to state the obvious, it is definitely an asset issue. I think that we should have a simple mechanism to force the server to regenerate them. But in the meantime, I may have a workaround (use at your own risk!!!):
+
+
+https://github.com/odoo/odoo/issues/19627
+
+`open Odoo in debug mode
+find the 'attachment' action (settings/database structure/attachment)
+go to list view (easier)
+filter on all attachment which starts with /web/content (those represent your assets)
+delete them all
+With this, the server should be force to regenerate them.`

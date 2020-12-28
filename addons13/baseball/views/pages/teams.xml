@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+  <template id="assets_frontend" inherit_id="website.assets_frontend" name="head team">
+    <xpath expr="." position="inside">
+        <script type="text/javascript" src="/baseball/static/src/js/team.js"></script>
+    </xpath>
+  </template>
+
+<template id="website.teams" name="Teams page">                
+  <t t-set="categories" t-value="request.env['baseball.categories'].sudo().search([('published','=', True)])"/>
+
+  <t t-call="website.layout">
+      <t t-set="additional_title">Equipes</t>
+      <div id="wrap" class="js_sale">
+        <div class="oe_structure"/>
+          <div class="container">
+            <div class='row'>
+              <div class="col-lg-4">
+                <t t-call="baseball.categories"/>
+              </div>
+              <div class="col-lg-7">
+                <t t-call="baseball.practices"/>
+              </div>
+            </div>
+          </div>
+        <div class="oe_structure mb32"/>
+      </div>
+  </t>
+</template>
+
+<template id="categories" name="Categories">
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">Catégories</h3></div>
+    <div class="panel-body">
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Age</th>
+            <th>Cotisation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <t t-foreach="categories or []" t-as="category">
+            <tr>
+              <td><span t-field="category.name"/></td>
+              <td><span t-field="category.start_date"/><i class="fa fa-long-arrow-right"></i><span t-field="category.end_date"/></td>
+              <td><span t-field="category.cotisation"/></td>
+            </tr>
+          </t>
+        </tbody>
+      </table>
+
+      <div t-if="request.env['baseball.season'].sudo().get_current_season().registration_description" t-field="request.env['baseball.season'].sudo().get_current_season().registration_description"/>
+
+      <t t-if="res_company.partner_id.bank_ids">
+        <p>Le payement est à effectuer sur le compte suivant:</p>
+        <table class="table table-condensed">
+          <tbody>
+            <t t-foreach="res_company.partner_id.bank_ids" t-as="bank_account">
+              <tr>
+                <td><span t-field="bank_account.partner_id.name"/></td>
+                <td><span t-field="bank_account.bank_id.name"/></td>
+                <td><span t-field="bank_account.acc_number"/></td>
+              </tr>
+            </t>
+          </tbody>
+        </table>  
+      </t>
+    </div>
+  </div>  
+
+</template>
+
+<template id="practices" name="Practices">
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">Entraînements</h3></div>
+      <div class="panel-body">
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#summer_practice" role="tab" data-toggle="tab">
+              Eté
+            </a>
+        </li>
+        <li>
+            <a href="#winter_practice" role="tab" data-toggle="tab">
+              Hiver
+            </a>
+        </li>
+      </ul>
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div class="tab-pane fade active in" id="summer_practice">
+          <t t-set="season" t-value="'summer'"/>
+          <t t-call="baseball.week_practices"/>
+        </div>
+        <div class="tab-pane fade" id="winter_practice">
+          <t t-set="season" t-value="'winter'"/>
+          <t t-call="baseball.week_practices"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="week_practices" name="Weekly Practices">
+  <t t-set="practices" t-value="request.env['baseball.teams.practice'].sudo().search([('season','=',season),('period', '=', 'current')])"/>
+  <t t-set="days" t-value="list(set(practices.mapped('dayofweek')))"/>
+  <t t-set="nothing" t-value="days.sort()"/>
+  <t t-set="times" t-value="list(set(practices.mapped(lambda r: (r.hour_from, r.hour_to))))"/>
+  <t t-set="nothing" t-value="times.sort()"/>
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th></th>
+          <t t-foreach="days or []" t-as="day">
+            <t t-set="practice" t-value="practices.filtered(lambda r,day=day: r.dayofweek == day)[0]"/>
+            <th><span t-field="practice.dayofweek"/></th>
+          </t>
+        </tr>
+      </thead>
+      <tbody>
+        <t t-foreach="times" t-as="time">
+          <tr>  
+            <t t-set="practice" t-value="practices.filtered(lambda r,time=time: r.hour_from == time[0] and r.hour_to == time[1])[0]"/>
+            <td><span t-esc="str(int(practice.hour_from))+'h'+str(int(60*(practice.hour_from - int(practice.hour_from) )) if (practice.hour_from - int(practice.hour_from)) else '') + ' - ' + str(int(practice.hour_to))+'h'+str(int(60*(practice.hour_to - int(practice.hour_to) )) if (practice.hour_to - int(practice.hour_to)) else '')"/></td>
+            <t t-foreach="days" t-as="day">
+                <t t-set="practice" t-value="practices.filtered(lambda r,day=day,time=time: r.dayofweek == day and r.hour_from == time[0] and r.hour_to == time[1])"/>
+                <td><span t-esc="', '.join(practice.mapped('team_ids').mapped('name'))"/></td>
+            </t>
+
+          </tr>
+        </t>
+      </tbody>
+    </table>
+</template>
+
+
+<template id="team_page" name="Team page">
+  <t t-call="website.layout">
+      <t t-set="additional_title">Equipe</t>
+      <div id="wrap" class="js_sale">
+        <div class="oe_structure"/>
+        <div class="container oe_website_sale">
+          <div class='row'>
+            <div class="col-lg-6">
+              <div class="panel panel-default">
+                <div class="panel-heading"><h3 class="panel-title">Equipe</h3></div>
+                <div class="panel-body">
+                  <t t-if="team.photo">
+                    <img class="img-responsive" t-att-src="'data:image/png;base64,'+team.photo"/>
+                  </t>
+                  <div class="col-lg-3">
+                    <t t-if="team.image">
+                      <img class="img-responsive" style="width: 100px" t-att-src="'data:image/png;base64,'+team.image"/>
+                    </t>
+                  </div>
+                  <div class="col-lg-9">
+<!--                     <div class="row">
+                      <H4>Divisions</H4>
+                      <p t-esc="', '.join(team.division_ids.mapped('name'))"/>
+                    </div> -->
+                      <H4>Entraînements</H4>
+                      <table class="table table-condensed data_roster_table">
+                        <t t-foreach="set(team.practices_ids.filtered(lambda r: r.period == 'current').mapped('season'))" t-as="season">
+                          <tr>
+                            <td colspan="4" class="text-center"><span t-field="team.practices_ids.filtered(lambda r, season=season: r.period == 'current' and r.season == season)[0].season"/></td>
+                          </tr>
+                          <t t-foreach="team.practices_ids.filtered(lambda r, season=season: r.period == 'current' and r.season == season)" t-as="practice">
+                            <tr>
+                              <td><span t-field="practice.dayofweek"/></td>
+                              <td><span t-esc="'%s:%02d'% (int(round(practice.hour_from-practice.hour_from%1)), int(round(practice.hour_from%1*60)))"/></td>
+                              <td><span t-esc="'%s:%02d'% (int(round(practice.hour_to-practice.hour_to%1)), int(round(practice.hour_to%1*60)))"/></td>
+                              <td><span t-field="practice.venue_id.name"/></td>
+                            </tr>
+                          </t>  
+                        </t>  
+                      </table>
+                      <div class="text-center">
+                        <a class="btn btn-default" t-att-href="'/page/teams/%s/calendar/practice.ics'% (team.id)">Download <i class="fa fa-calendar"/></a>
+                        <a class="btn btn-default" t-att-href="'http://www.google.com/calendar/render?cid=%s/page/teams/%s/calendar/practice.ics' % (request.env['ir.config_parameter'].sudo().get_param('web.base.url'),team.id)"><i class="fa fa-google"/> Subscribe <i class="fa fa-calendar"/></a>   
+                        <a class="btn btn-default" t-att-href="'/page/teams/%s/practice'% (team.id)">Details <i class="fa fa-calendar"/></a>
+                      </div>                    
+                  </div>
+                  <table class="table table-condensed data_roster_table">
+                    <thead>
+                      <tr>
+                        <th class="col-md-1 col-xs-2">#</th>
+                        <th class="col-md-2 col-xs-3"></th>
+                        <th class="col-md-3 col-xs-5">Nom</th>
+                        <th class="col-md-1 hidden-xs"></th>
+                        <th class="col-md-2 col-xs-2 text-center"><i class="fa fa-globe"></i></th>
+                        <th class="col-md-3 hidden-xs">Naissance</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <t t-call="baseball.team_staff"/>
+                      <t t-call="baseball.team_roster"/>
+                    </tbody>
+                  </table>
+                </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+              <t t-call="baseball.team_calendar"/>
+            </div>
+          </div>
+        </div>
+        <div class="oe_structure mb32"/>
+      </div>
+  </t>
+</template>
+
+<template id="team_roster" name="Team roster">
+  <t t-if="team.players_ids">
+      <tr>
+        <th colspan="4">Roster</th>
+      </tr>
+      <t t-foreach="team.players_ids or []" t-as="player">
+        <tr class="js_player" t-attf-id="#{player.id}" >
+          <td><span t-esc="', '.join(set(player.jerseys_ids.mapped(lambda r: str(r.number))))"/></td>
+          <td>
+            <t t-if="player.image">
+              <img class="maxed img img-responsive" style="width: 50px" t-att-src="'data:image/png;base64,'+player.sudo().image_small"/>
+            </t>
+          </td>
+          <td><a href="#"><span t-field="player.name"/></a></td>
+          <td class="hidden-xs"><span t-esc="', '.join(player.positions_ids.mapped('code'))"/></td>
+          <td><t t-if="player.country_id"><span t-field="player.country_id.image" t-field-options='{"widget": "image", "max_width": 25}'/></t></td>
+          <td class="hidden-xs"><span t-field="player.birthdate"/></td>
+        </tr>
+      </t>
+  </t>
+</template>
+
+<template id="team_staff" name="Team Staff">
+  <t t-if="team.responsible_ids">
+    <tr>
+      <th colspan="4">Managers</th>
+    </tr>
+    <t t-foreach="team.responsible_ids or []" t-as="manager">
+      <tr class="js_player" t-attf-id="#{manager.id}" >
+        <td/>
+        <td>
+          <t t-if="manager.image">
+            <img class="maxed img img-responsive" style="width: 50px" t-att-src="'data:image/png;base64,'+manager.sudo().image_small"/>
+          </t>
+        </td>
+        <td><a href="#"><span t-field="manager.name"/></a></td>
+        <td class="hidden-xs"/>
+        <td><t t-if="manager.country_id"><span t-field="manager.country_id.image" t-field-options='{"widget": "image", "max_width": 25}'/></t></td>
+        <td class="hidden-xs"><span t-field="manager.birthdate"/></td>
+      </tr>
+    </t>
+  </t>
+  <t t-if="team.coaches_ids">
+    <tr>
+      <th colspan="4">Coaches</th>
+    </tr>
+      <t t-foreach="team.coaches_ids or []" t-as="coach">
+        <tr class="js_player" t-attf-id="#{coach.id}" >
+          <td/>
+          <td>
+            <t t-if="coach.image">
+              <img class="maxed img img-responsive" style="width: 50px" t-att-src="'data:image/png;base64,'+coach.sudo().image_small"/>
+            </t>
+          </td>
+          <td><a href="#"><span t-field="coach.name"/></a></td>
+          <td class="hidden-xs"/>
+          <td><t t-if="coach.country_id"><span  t-field="coach.country_id.image" t-field-options='{"widget": "image", "max_width": 25}'/></t></td>
+          <td class="hidden-xs"><span  t-field="coach.birthdate"/></td>
+        </tr>
+      </t>
+  </t>
+</template>
+
+
+<template id="team_calendar" name="Team calendar">
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">Compétition</h3></div>
+    <div class="panel-body">
+      <div class="text-center">
+        <a class="btn btn-default" t-att-href="'/page/teams/%s/calendar/game.ics'% (team.id)">Download <i class="fa fa-calendar"/></a>
+        <a class="btn btn-default" t-att-href="'http://www.google.com/calendar/render?cid=%s/page/teams/%s/calendar/game.ics' % (request.env['ir.config_parameter'].sudo().get_param('web.base.url'),team.id)"><i class="fa fa-google"/> Subscribe <i class="fa fa-calendar"/></a>
+      </div>
+      <table class="table table-condensed data_calendar_table">
+        <thead>
+          <tr>
+            <th class="col-md-2 col-xs-3">Date</th>
+            <th class="col-md-1 col-xs-2"/>
+            <th class="col-md-3 col-xs-3"><span class="hidden-xs">Adversaire</span><span class="visible-xs">Adv.</span></th>
+            <th class="col-md-3 hidden-xs">Lieu</th>
+            <th class="col-md-3 col-xs-3">Heure</th>
+            <th class="col-md-2 col-xs-2"></th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <t t-foreach="team.game_ids.filtered(lambda r: r.period == 'current') or []" t-as="game">
+            <t t-call="baseball.table_game_calendar"/>
+          </t>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+
+<template id="table_game_calendar" name="Specific game calendar">
+  <t t-if="game.game_type != 'tournament'">
+    <t t-call="baseball.table_game_calendar_regular"/>
+  </t>
+  <t t-if="game.game_type == 'tournament'">
+    <t t-call="baseball.table_game_calendar_tournament"/>
+  </t>
+</template>
+
+<template id="table_game_calendar_regular" name="Regular game calendar">
+  <tr t-att-style="'font-style: italic;' if game.game_type == 'friendly' else ''">
+    <td class="js_game" t-attf-id="#{game.id}"><span t-field="game.start_time" t-field-options='{"format": "dd/MM/yy"}'/></td>
+
+    <t t-if="game.away_team == team">
+      <td class="js_game" t-attf-id="#{game.id}">
+        <t t-if="game.home_team.logo_id and game.home_team.logo_id.image" >
+          <img class="maxed img img-responsive img-circle" style="width: 25px" t-att-src="'data:image/png;base64,'+game.home_team.logo_id.sudo().image"/>
+        </t>
+      </td>
+      <td class="js_game" t-attf-id="#{game.id}"><span t-field="game.home_team.name"/></td>
+    </t>
+    <t t-if="game.home_team == team">
+      <td class="js_game" t-attf-id="#{game.id}">
+        <t t-if="game.away_team.logo_id and game.away_team.logo_id.image">
+          <img class="maxed img img-responsive img-circle" style="width: 25px" t-att-src="'data:image/png;base64,'+game.away_team.logo_id.sudo().image"/>
+        </t>
+      </td>
+      <td class="js_game" t-attf-id="#{game.id}"><span t-field="game.away_team.name"/></td>
+    </t>
+    <td class="js_game hidden-xs" t-attf-id="#{game.id}"><span t-field="game.venue.name"/></td>
+    <td class="js_game" t-attf-id="#{game.id}"><span  t-field="game.start_time" t-field-options='{"format": "HH:mm"}'/></td>
+    <td>
+      <t t-if="user and game.start_time &gt; datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')">
+        <t t-if="user.current_partner_id in game.present_players_ids">
+          <i class="fa fa-check-circle-o fa-2x text-success js_game_attend" t-attf-id="#{game.id}"/>
+        </t>
+        <t t-if="user.current_partner_id not in game.present_players_ids">
+          <i class="fa fa-check-circle-o fa-2x js_game_attend" t-attf-id="#{game.id}"/>
+        </t>
+
+        <t t-if="user.current_partner_id in game.absent_players_ids">
+          <i class="fa fa-times-circle-o fa-2x text-danger js_game_absent" t-attf-id="#{game.id}" />
+        </t>                
+        <t t-if="user.current_partner_id not in game.absent_players_ids">
+          <i class="fa fa-times-circle-o fa-2x js_game_absent" t-attf-id="#{game.id}"/>
+        </t>
+      </t>
+      <t t-if="game.start_time &lt; datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')">
+        <t t-if="((game.home_team == team) and (game.result == 'home')) or ((game.away_team == team) and (game.result == 'away'))">
+          <span style="font-weight: bold;">W</span>
+        </t>
+        <t t-if="((game.home_team == team) and (game.result == 'away')) or ((game.away_team == team) and (game.result == 'home'))">
+          <span>L</span>
+        </t>
+        <t t-if="game.result == 'tie'">
+          <span>T</span>
+        </t>
+        <t t-if="game.result == 'np'">
+          <span>NP</span>
+        </t>
+      </t>
+    </td>
+  </tr>
+</template>
+
+<template id="table_game_calendar_tournament" name="Tournament game calendar">
+  <tr t-att-style="'font-style: italic;' if game.game_type == 'friendly' else ''">
+    <td class="js_game" t-attf-id="#{game.id}"><span t-field="game.start_time" t-field-options='{"format": "dd/MM/yy"}'/> 
+      <t t-if="game.end_time_tournament and game.start_date != game.end_date_tournament">
+        - <span t-field="game.end_time_tournament" t-field-options='{"format": "dd/MM/yy"}'/>
+      </t>
+      </td>
+    <td/>
+    <td class="js_game" t-attf-id="#{game.id}" style="font-weight: bold;">
+    Tournois</td>
+
+
+    <td class="js_game hidden-xs" t-attf-id="#{game.id}"><span t-field="game.venue.name"/></td>
+    <td class="js_game" t-attf-id="#{game.id}"/>
+    <td>
+      <t t-if="user">
+        <t t-if="user.current_partner_id in game.present_players_ids">
+          <i class="fa fa-check-circle-o fa-2x text-success js_game_attend" t-attf-id="#{game.id}"/>
+        </t>
+        <t t-if="user.current_partner_id not in game.present_players_ids">
+          <i class="fa fa-check-circle-o fa-2x js_game_attend" t-attf-id="#{game.id}"/>
+        </t>
+
+        <t t-if="user.current_partner_id in game.absent_players_ids">
+          <i class="fa fa-times-circle-o fa-2x text-danger js_game_absent" t-attf-id="#{game.id}" />
+        </t>                
+        <t t-if="user.current_partner_id not in game.absent_players_ids">
+          <i class="fa fa-times-circle-o fa-2x js_game_absent" t-attf-id="#{game.id}"/>
+        </t>
+
+      </t>
+    </td>
+  </tr>
+</template>
+
+
+  <template id="modal_player" name="Player">
+  <div id="modal_player" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+          <h4 class="modal-title" id="myModalLabel" t-esc="player.name + ' (#' + ', '.join(set(player.jerseys_ids.mapped(lambda r: str(r.number)))) +  ')'">Nom du joueur</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+           <div class="col-md-3">
+            <div class="boxed right">
+            <t t-if="player_image">
+              <img class="maxed img img-responsive " t-att-src="'data:image/png;base64,'+player_image" t-att-alt="player.name"/>
+            </t>
+            </div>
+           </div>
+           <div class="col-md-9">
+            <div class="boxed right">
+              <t t-if="player.country_id"><span  t-field="player.country_id.image" t-field-options='{"widget": "image", "max_width": 25}'/></t>
+
+               <div  t-esc="'Positions: ' +', '.join(player.positions_ids.mapped('name'))" />
+               <div t-if="is_coach or is_manager">
+                 <div>Email: <a t-attf-href="mailto:#{player.email}"><span t-field="player.email"/></a></div>
+                 <div>Téléphone: <a t-attf-href="tel:#{player.phone}"><span t-field="player.phone"/></a></div>
+                 <div>Mobile: <a t-attf-href="tel:#{player.mobile}"><span t-field="player.mobile"/></a></div>
+               </div>
+
+              <t t-if="player.personal_comments">
+               <div t-field="player.personal_comments" />
+              </t>
+            </div>
+           </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+
+  <template id="modal_game" name="Game">
+  <div id="modal_player" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+          <t t-if="game.game_type == 'tournament'">
+            <h4 class="modal-title" id="myModalLabel" t-esc="'Tournament @' + game.venue.name">Game number</h4>
+          </t>
+          <t t-if="game.game_type != 'tournament'">
+            <h4 class="modal-title" id="myModalLabel" t-esc="game.game_number if game.game_type == 'competition' else 'Friendly Game'">Game number</h4>
+          </t>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+           <div class="col-md-6">
+            <div class="boxed right">
+              <t t-if="game.game_type == 'tournament'">
+                <div>
+                  <span t-field="game.start_time" t-field-options='{"format": "dd/MM/yy HH:mm"}'/> - <span t-field="game.end_time_tournament" t-field-options='{"format": "dd/MM/yy HH:mm"}'/>
+                </div>
+              </t>
+              <t t-if="game.game_type != 'tournament'">
+                 <div t-esc="game.home_team.name + ' @ ' + game.away_team.name" />
+                 <div t-field="game.start_time" t-field-options='{"format": "dd/MM/yy"}'/> 
+                 <div t-field="game.start_time" t-field-options='{"format": "HH:mm"}'/> 
+                 <div  t-esc="'@ ' + game.venue.name" />
+                 <div>
+                  <span t-if="game.venue.street" ><span t-field="game.venue.street"/><br/></span>
+                  <span t-if="game.venue.street2" ><span t-field="game.venue.street2"/><br/></span>
+                  <span t-if="game.venue.zip_code" ><span t-field="game.venue.zip_code"/> </span>
+                  <span t-if="game.venue.city" ><span t-field="game.venue.city"/><br/></span>
+                 </div>
+              </t>
+            </div>
+           </div>
+           <div class="col-md-4">
+            <t t-if="game.venue">
+<iframe width="100%" height="200" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" t-attf-src="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=#{game.venue.street} #{game.venue.street2}, #{game.venue.zip_code} #{game.venue.city}&amp;ie=UTF8&amp;z=15&amp;t=m&amp;iwloc=near&amp;output=embed"></iframe>
+            </t>
+           </div>
+          </div>
+
+
+          <div class="row" t-if="user">
+            <div class="col-md-6">
+              <h4>Présents <i class="fa fa-check-circle-o fa-2x"></i></h4>
+                <t t-foreach="game.present_players_ids or []" t-as="attendee">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <t t-if="attendee.image">
+                        <img class="maxed img img-responsive" style="width: 25px" t-att-src="'data:image/png;base64,'+attendee.sudo().image_small"/>
+                      </t>
+                    </div>
+                    <div class="col-md-9">
+                      <span t-field="attendee.name"/>
+                    </div>
+                  </div>
+                </t>
+
+            </div>
+            <div class="col-md-6">
+              <h4>Absents <i class="fa fa-times-circle-o fa-2x"></i></h4>
+                <t t-foreach="game.absent_players_ids or []" t-as="absentee">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <t t-if="absentee.image">
+                        <img class="maxed img img-responsive" style="width: 25px" t-att-src="'data:image/png;base64,'+absentee.sudo().image_small"/>
+                      </t>
+                    </div>
+                    <div class="col-md-9">
+                      <span t-field="absentee.name"/>
+                    </div>
+                  </div>
+                </t>
+            </div>
+          </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+
+
+
+  </data>
+</odoo>

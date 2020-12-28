@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="round_form_view">
+			<field name="name">round.of.investment</field>
+			<field name="model">round.of.investment</field>
+			<field name="arch" type="xml">
+			<form>
+			<group>
+				<field name="name" />
+				<field name="description" />
+			</group>
+			</form>
+			</field>
+		</record>
+		<record model="ir.ui.view" id="round_tree_view">
+			<field name="name">round.of.investment</field>
+			<field name="model">round.of.investment</field>
+			<field name="arch" type="xml">
+			<tree>
+				<field name="name" />
+				<field name="description" />
+			</tree>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="round_action">
+			<field name="name">round of investment</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">round.of.investment</field>
+<!--			<field name="view_type">form</field>-->
+			<field name="view_mode">tree,form,pivot,graph</field>
+			<field name="view_id" ref="darfproject.round_tree_view" />
+		</record>
+
+		<menuitem
+            id="round_investment_manu"
+            name="Round of Investment"
+            parent = "darfproject.project_estimate_menu"
+            action="round_action"
+            sequence="7"/>
+
+	</data>
+</odoo>

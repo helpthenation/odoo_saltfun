@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+  <template id="assets_frontend" inherit_id="website.assets_frontend" name="head team">
+    <xpath expr="." position="inside">
+        <script type="text/javascript" src="/baseball/static/src/js/team.js"></script>
+        <script type="text/javascript" src="/baseball/static/src/js/jquery.dataTables.js"></script>
+        <script type="text/javascript" src="/baseball/static/src/js/full_calendar.js"></script>
+        <script type="text/javascript" src="/baseball/static/src/js/officials.js"></script>
+    </xpath>
+  </template>
+
+
+
+
+<template id="upcoming_schedule" name="Upcoming calendar">
+  <t t-call="website.layout">
+      <t t-set="additional_title">Equipe</t>
+      <div id="wrap" class="js_sale">
+        <div class="oe_structure"/>
+        <div class="container oe_website_sale">
+          <div class='row'>
+            <div class="col-lg-12">
+              <div class="panel panel-default">
+                <div class="panel-heading"><h3 class="panel-title">Compétition</h3></div>
+                <div class="panel-body">
+                  <t t-call="baseball.upcoming_schedule_table"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="oe_structure mb32"/>
+      </div>
+  </t>
+</template>
+
+<template id="upcoming_schedule_table" name="Upcoming calendar table">
+      <table class="table table-condensed data_calendar_table data_full_calendar_table footable">
+        <thead>
+          <tr>
+            <th class="col-md-2 col-xs-2" data-toggle="true">Date</th>
+            <th class="col-md-2 col-xs-2" data-hide="phone">Catégorie</th>
+            <th class="col-md-2 col-xs-2" data-hide="phone,tablet">Division</th>
+            <th class="col-md-2 col-xs-2">Home</th>
+            <th class="col-md-1 col-xs-1"/>
+            <th class="col-md-1 col-xs-1"/>
+            <th class="col-md-2 col-xs-2">Away</th>
+            <th class="col-md-2 col-xs-2" data-hide="phone">Lieu</th>
+            <th class="col-md-2 col-xs-2">Heure</th>
+            <th class="col-md-2 col-xs-2" data-hide="phone">Scoreur</th>
+            <th class="col-md-2 col-xs-2" data-hide="phone">Arbitre</th>
+          </tr>
+        </thead>
+        <tbody>
+          <t t-foreach="games" t-as="game">
+            <t t-if="game.game_type != 'tournament'">
+              <tr class="js_game" t-attf-id="#{game.id}" t-att-style="'font-style: italic;' if game.game_type == 'friendly' else ''">
+                <td><span t-field="game.start_time" t-field-options='{"format": "dd/MM/yy"}'/></td>
+                <td><t t-if="((game.home_team | game.away_team).mapped('category_ids'))" ><span t-esc="(game.home_team | game.away_team).mapped('category_ids').sorted(lambda r: r.sequence)[0].name"/></t></td>
+                <td><span t-field="game.division.name"/></td>
+                <td><span t-field="game.home_team.name"/></td>
+                <td>
+                  <t t-if="game.home_team.logo_id and game.home_team.logo_id.image" >
+                    <img class="maxed img img-responsive img-circle" style="width: 25px" t-att-src="'data:image/png;base64,'+game.home_team.logo_id.sudo().image"/>
+                  </t>
+                </td>
+                <td>
+                  <t t-if="game.away_team.logo_id and game.away_team.logo_id.image" >
+                    <img class="maxed img img-responsive img-circle" style="width: 25px" t-att-src="'data:image/png;base64,'+game.away_team.logo_id.sudo().image"/>
+                  </t>
+                </td>          
+                <td><span t-field="game.away_team.name"/></td>
+                <td><span t-field="game.venue.name"/></td>
+                <td><span t-field="game.start_time" t-field-options='{"format": "HH:mm"}'/></td>
+                <td>
+                  <t t-if="game.venue.officials_needed">
+                    <span t-if="game.scorer_ids" t-esc="','.join(game.scorer_ids.mapped('name'))"/>
+                    <t t-if="not game.scorer_ids and user">
+                      <button type="button" class="btn btn-primary js_game_score" t-attf-id="#{game.id}">Je score!</button>
+                    </t>
+                  </t>
+                </td>
+                <td>
+                  <t t-if="game.venue.officials_needed">
+                    <span t-if="game.umpire_ids" t-esc="', '.join(game.umpire_ids.mapped('name'))"/>
+                    <t t-if="not game.umpire_ids and user">
+                      <button type="button" class="btn btn-primary js_game_umpire" t-attf-id="#{game.id}">J'arbitre!</button>
+                    </t>
+                  </t>
+                </td>                
+              </tr>
+            </t>
+            <t t-if="game.game_type == 'tournament'">
+              <tr class="js_game" t-attf-id="#{game.id}" style="font-weight: bold;">
+                <td><span t-field="game.start_time" t-field-options='{"format": "dd/MM/yy"}'/></td>
+                <td>Tournoi</td>
+                <td/>
+                <td><span t-field="game.home_team.name"/></td>
+                <td/>
+                <td/>
+                <td/>
+                <td><span t-field="game.venue.name"/></td>
+                <td><span t-field="game.start_time" t-field-options='{"format": "HH:mm"}'/></td>
+                <td/>
+                <td/>
+              </tr>
+            </t>
+          </t>
+        </tbody>
+      </table>
+</template>
+
+
+<template id="invitation_response" name="Game invitation response">                
+  <t t-call="website.layout">
+      <t t-set="additional_title">Game invitation response</t>
+      <div id="wrap">
+        <div class="oe_structure"/>
+          <div class="container">
+            <div class='row'>
+              <div class="col-lg-12 panel panel-default">
+                <h4><span t-esc="'%s : %s @ %s' % (game.game_number, game.away_team.name, game.home_team.name)"/></h4>
+
+
+                <p><span t-field="partner.name"/> <span t-esc="'ta présence' if answer else 'ton absence'"/> a bien été enregistrée. N'hésite pas à anticiper et mettre à jour tes présences et absences pour les matches suivants en te connectant avec ton compte et en allant ensuite sur la <a t-att-href="'/page/teams/%s' % team.id">page de ton équipe</a>.</p>
+                
+                 <p>Retrouve toutes les informations qui te concerne via <a href="/profile">ton profil</a>.</p>
+
+              </div>
+            </div>
+          </div>
+        <div class="oe_structure mb32"/>
+      </div>
+  </t>
+</template>
+
+
+
+  </data>
+</odoo>

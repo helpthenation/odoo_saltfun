@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--<record id="stock_picking_form_connector" model="ir.ui.view">
+         <field name="name">stock picking loggo connector</field>
+         <field name="model">stock.picking</field>
+         <field name="type">form</field>
+         <field name="inherit_id" ref="stock.view_picking_form"/>
+         <field name="arch" type="xml">
+             <xpath expr="//notebook/page[@name='note']" position="after">
+                 <page name="LogGo" string="LogGo">
+                     <group name="call_actions" col="4">
+                         <button string="Crear pedido en LogGo" colspan="2" type="object" name="create_loggo_sale_order" class="oe_highlight"/>
+                     </group>
+                     <group name="fields" col="4">
+                         <field name="x_kg_estimado_porte" />
+                         <field name="x_loggo_origen" />
+                         <field name="x_loggo_destino" />
+                         <field name="x_loggo_pedido" />
+                         <field name="x_loggo_recoger_date" />
+                         <field name="x_loggo_entregar_date" />
+                         <field name="x_loggo_nota" />
+                     </group>
+                 </page>
+             </xpath>
+         </field>
+     </record>-->
+
+    <!--<record id="stock_picking_form_connector_loggo" model="ir.ui.view">
+        <field name="name">stock picking loggo connector</field>
+        <field name="model">stock.picking</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="studio_customization.odoo_studio_stock_pi_13a96af1-ed09-4ef1-890e-ef4fb41d08bc"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='studio_page_1Q9fW']" position="inside">
+                <group name="call_actions" col="4">
+                    <button string="Crear pedido en LogGo" colspan="2" type="object" name="create_loggo_sale_order" class="oe_highlight"/>
+                </group>
+            </xpath>
+        </field>
+    </record>-->
+
+</odoo>

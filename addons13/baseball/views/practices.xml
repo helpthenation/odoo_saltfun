@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+<record id="view_baseball_practice_drills_form" model="ir.ui.view">
+    <field name="name">baseball.teams.practice.form</field>
+    <field name="model">baseball.teams.practice.event</field>
+    <field name="arch" type="xml">
+        <form string="Teams" create="false">
+        <header>
+            <button name="%(action_baseball_practice_template_wizard)d" type="action" string="Load template" context="{'default_practice_id': id}"/>
+            <button name="save_as_template" type="object" string="Save as template"/>
+        </header>   
+        <sheet>
+
+            <group>
+                <group>
+                    <field name="start_time"/>
+                    <field name="end_time"/>
+                    <field name="duration" widget="float_time"/>
+                    <field name="team_id"/>
+                    <field name="venue_id"/>
+                </group>
+            </group>
+            <notebook> 
+                <page name="drills" string="Drills" >
+                    <field name="drill_ids">
+                        <tree editable="bottom" default_order="section_sequence,sequence">
+                            <field name="section_sequence" string="Section order"/>
+                            <field name="section_id" context="{'default_practice_copy_id': parent.id}"/>
+                            <field name="sequence" string="Drill order"/>
+                            <field name="team_id" invisible="1"/>
+                            <field name="category_ids" invisible="1"/>
+                            <field name="drill_id" context="{'default_category_ids': category_ids}"/>
+                            <field name="skill_ids" widget="many2many_tags"/>
+                            <field name="time" widget="float_time"/>
+                            <field name="duration" widget="float_time"/>
+                            <field name="repetitions"/>
+                            <field name="material_ids" widget="many2many_tags"/>
+                        </tree>
+                        <form>
+                            <group>
+                                <field name="section_id" context="{'default_practice_copy_id': parent.id}"/>
+                                <field name="drill_id" />
+                                <field name="skill_ids" widget="many2many_tags"/>
+                                <field name="time" widget="float_time"/>
+                                <field name="duration" widget="float_time"/>
+                                <field name="repetitions"/>
+                                <field name="material_ids" widget="many2many_tags"/>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+                <page name="attendance" string="Attendence" >
+                    <group>
+                        <group >
+                            <label for="present_players_ids" string="Attendees"/>
+                            <newline/>
+                            <field name="present_players_ids" domain="[('team_ids','in',team_id)]" nolabel="1" context="{
+'form_view_ref':'baseball.view_baseball_members_form'}">
+                                <tree>
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+                            <label for="absent_players_ids" string="Absentees" />
+                            <newline/>
+                            <field name="absent_players_ids" domain="[('team_ids','in',team_id)]" nolabel="1" context="{
+'form_view_ref':'baseball.view_baseball_members_form'}">
+                                <tree>
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </group>
+                </page>
+
+            </notebook> 
+        </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="view_baseball_practice_drills_tree" model="ir.ui.view">
+    <field name="name">baseball.teams.practice.tree</field>
+    <field name="model">baseball.teams.practice.event</field>
+    <field name="arch" type="xml">
+        <tree string="Teams" create="false">
+            <field name="start_time"/>
+            <field name="end_time"/>
+            <field name="team_id"/>
+            <field name="venue_id"/>
+        </tree>
+    </field>
+</record>
+
+<record id="view_practice_event_search" model="ir.ui.view">
+    <field name="name">baseball.practice.search</field>
+    <field name="model">baseball.teams.practice.event</field>
+    <field name="arch" type="xml">
+        <search>
+          <field name="team_id"/>
+          <filter name="current" string="Current season" domain="[('period', '=', 'current')]"/>
+          <filter name="past" string="Past seasons" domain="[('period', '=', 'past')]"/>
+          <filter string="Team" name="groupby_team" domain="[]" context="{'group_by':'team_id'}"/>
+        </search>
+    </field>
+</record>
+
+<record id="view_baseball_practice_template_drills_form" model="ir.ui.view">
+    <field name="name">baseball.teams.template.form</field>
+    <field name="model">baseball.teams.practice.template</field>
+    <field name="arch" type="xml">
+        <form string="Teams">
+        <sheet>
+            <group>
+                <group>
+                    <field name="name"/>
+                    <field name="team_id"/>
+                    <field name="duration" widget="float_time"/>
+                </group>
+            </group>
+            <notebook> 
+                <page name="drills" string="Drills" >
+                    <field name="drill_ids">
+                        <tree editable="bottom" default_order="section_sequence,sequence">
+                            <field name="section_sequence" string="Section order"/>
+                            <field name="section_id" context="{'default_practice_copy_id': parent.id}"/>
+                            <field name="sequence" string="Drill order"/>
+                            <field name="team_id" invisible="1"/>
+                            <field name="category_ids" invisible="1"/>
+                            <field name="drill_id" context="{'default_category_ids': category_ids}"/>
+                            <field name="skill_ids" widget="many2many_tags"/>
+                            <field name="time" widget="float_time"/>
+                            <field name="duration" widget="float_time"/>
+                            <field name="repetitions"/>
+                            <field name="material_ids" widget="many2many_tags"/>
+                        </tree>
+                        <form>
+                            <group>
+                                <field name="section_id" context="{'default_practice_copy_id': parent.id}"/>
+                                <field name="drill_id" />
+                                <field name="skill_ids" widget="many2many_tags"/>
+                                <field name="time" widget="float_time"/>
+                                <field name="duration" widget="float_time"/>
+                                <field name="repetitions"/>
+                                <field name="material_ids" widget="many2many_tags"/>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </notebook> 
+        </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="view_baseball_practice_template_drills_tree" model="ir.ui.view">
+    <field name="name">baseball.teams.practice.template.tree</field>
+    <field name="model">baseball.teams.practice.template</field>
+    <field name="arch" type="xml">
+        <tree string="Teams">
+            <field name="name"/>
+            <field name="team_id"/>
+        </tree>
+    </field>
+</record>
+
+<record id="view_practice_template_search" model="ir.ui.view">
+    <field name="name">baseball.practice.search</field>
+    <field name="model">baseball.teams.practice.template</field>
+    <field name="arch" type="xml">
+        <search>
+          <field name="team_id"/>
+          <filter string="Team" name="groupby_team" domain="[]" context="{'group_by':'team_id'}"/>
+        </search>
+    </field>
+</record>
+
+
+<record id="view_baseball_skills_form" model="ir.ui.view">
+    <field name="name">baseball.skills.form</field>
+    <field name="model">baseball.skill</field>
+    <field name="arch" type="xml">
+        <form string="Teams">
+        <sheet>
+            <group>
+                <group>
+                    <field name="name"/>
+                    <field name="published"/>
+                    <field name="minimal_category_id"/>
+                    <field name="category_ids" widget="many2many_tags"/>
+                    <field name="team_ids" widget="many2many_tags"/>
+                </group>
+            </group>
+            <notebook> 
+                <page name="drills" string="Drills" >
+                    <field name="drill_ids">
+                        <tree>
+                            <field name="name"/>
+                            <field name="range_number"/>
+                            <field name="range_time"/>
+                            <field name="category_ids" widget="many2many_tags"/>
+                            <field name="material_ids" widget="many2many_tags"/>
+                        </tree>
+                    </field>
+                </page>
+            </notebook> 
+        </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="view_baseball_skills_tree" model="ir.ui.view">
+    <field name="name">baseball.teams.tree</field>
+    <field name="model">baseball.skill</field>
+    <field name="arch" type="xml">
+        <tree string="Teams">
+            <field name="name"/>
+            <field name="category_ids" widget="many2many_tags"/>
+        </tree>
+    </field>
+</record>
+
+<record id="view_baseball_drills_form" model="ir.ui.view">
+    <field name="name">baseball.teams.form</field>
+    <field name="model">baseball.drill</field>
+    <field name="arch" type="xml">
+        <form string="Teams">
+        <sheet>
+            <div class="oe_title oe_left">
+                <h1>
+                    <field name="name"/>
+                </h1>
+            </div>
+            <group>
+                <group>
+                    <field name="website_published"/>
+                    <field name="minimal_number"/>
+                    <field name="maximal_number"/>
+                    <field name="minimal_duration" widget="float_time"/>
+                    <field name="maximal_duration" widget="float_time"/>
+                    <field name="material_ids" widget="many2many_tags"/>
+                    <field name="minimal_category_id"/>
+                    <field name="category_ids" widget="many2many_tags"/>
+                    <field name="skill_ids" widget="many2many_tags"/>
+                </group>
+            </group>
+            <field name="description"/>
+        </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="view_baseball_drills_tree" model="ir.ui.view">
+    <field name="name">baseball.teams.tree</field>
+    <field name="model">baseball.drill</field>
+    <field name="arch" type="xml">
+        <tree string="Teams">
+            <field name="name"/>
+            <field name="minimal_number"/>
+            <field name="maximal_number"/>
+            <field name="minimal_duration" widget="float_time"/>
+            <field name="maximal_duration" widget="float_time"/>
+            <field name="minimal_category_id"/>
+            <field name="category_ids" widget="many2many_tags"/>
+            <field name="skill_ids" widget="many2many_tags"/>
+        </tree>
+    </field>
+</record>
+
+
+<record model="ir.actions.act_window" id="baseball_action_practice_event">
+    <field name="name">Practices</field>
+    <field name="res_model">baseball.teams.practice.event</field>
+    <field name="view_mode">tree,form</field>
+    <field name="context">{'search_default_current':1, 'search_default_groupby_team':1}</field>
+</record>
+
+<record model="ir.actions.act_window" id="baseball_action_practice_template">
+    <field name="name">Practice Templates</field>
+    <field name="res_model">baseball.teams.practice.template</field>
+    <field name="view_mode">tree,form</field>
+    <field name="context">{'groupby_team':1}</field>
+</record>
+
+<record model="ir.actions.act_window" id="baseball_action_skills">
+    <field name="name">Skills</field>
+    <field name="res_model">baseball.skill</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<record model="ir.actions.act_window" id="baseball_action_drills">
+    <field name="name">Drills</field>
+    <field name="res_model">baseball.drill</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem id="menu_teaching_management" name="Teaching"
+          parent="main_baseball_menu"
+          sequence="2"
+          />
+
+<menuitem id="menu_practice_event" name="Practices"
+          parent="menu_teaching_management"
+          action="baseball_action_practice_event"
+          sequence="3"
+          />
+
+<menuitem id="menu_practice_template" name="Practice Templates"
+          parent="menu_teaching_management"
+          action="baseball_action_practice_template"
+          sequence="3"
+          />
+
+
+<menuitem id="menu_skills" name="Skills"
+          parent="menu_teaching_management"
+          action="baseball_action_skills"
+          sequence="10"
+          />
+
+<menuitem id="menu_drills" name="Drills"
+          parent="menu_teaching_management"
+          action="baseball_action_drills"
+          sequence="5"
+          />
+
+
+    </data>
+</odoo>

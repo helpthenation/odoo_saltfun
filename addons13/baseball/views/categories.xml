@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+
+        <record id="view_baseball_categories_form" model="ir.ui.view">
+            <field name="name">baseball.categories.form</field>
+            <field name="model">baseball.categories</field>
+            <field name="arch" type="xml">
+                <form string="Contacts">
+                <sheet>
+                    <!-- <field name="image" widget='image' class="oe_left oe_avatar" options='{"preview_image": "image_medium", "size": [90, 90]}'/> -->
+                    <div class="oe_title oe_left">
+                        <h1>
+                            <field name="name" placeholder="Name" />
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="teams_ids" widget="many2many_tags" domain="[('is_opponent', '=', False)]"/>
+                            <field name="cotisation" widget="monetary" options="{'currency': %(base.EUR)d}"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="active"/>
+                            <field name="published"/>
+                        </group>
+                    </group>
+                    <notebook colspan="4">
+                        <page name="members" string="Members">
+                            <field name="players_ids" readonly="1" context="{
+'form_view_ref':'baseball.view_baseball_members_form'}">
+                                <tree colors="red: is_in_order==False; blue: is_in_order==True and is_registered==False">
+                                    <field name="name"/>
+                                    <field name="phone"/>
+                                    <field name="email"/>
+                                    <field name="positions_ids" widget="many2many_tags"/>
+                                    <field name="is_photo"/>
+                                    <field name="is_certificate"/>
+                                    <field name="is_in_order" invisible="1"/>
+                                    <field name="is_registered"/>
+                                    <field name="licence_number"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="games" string="Games" >
+                            <field name="game_ids">
+                                <tree>
+				                    <field name="game_number"/>
+				                    <field name="start_time"/>
+				                    <field name="division"/>
+				                    <field name="home_team"/>
+				                    <field name="score_home"/>
+				                    <field name="away_team"/>
+				                    <field name="venue"/>
+				                    <field name="score_away"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="category_description" string="Description">
+                            <field name="description"/>
+                        </page>
+                    </notebook>                    
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="view_baseball_categories_tree" model="ir.ui.view">
+            <field name="name">baseball.categories.tree</field>
+            <field name="model">baseball.categories</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Categories">
+                    <field name="sequence" widget="handle" />
+                    <field name="name"/>
+                    <field name="cotisation"/>
+                    <field name="teams_ids"/>
+                </tree>
+            </field>
+        </record>
+
+
+
+
+       <record id="view_baseball_categories_filter" model="ir.ui.view">
+            <field name="name">baseball.categories.search</field>
+            <field name="model">baseball.categories</field>
+            <field name="arch" type="xml">
+                <search>
+                  <field name="name"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="baseball_categories_list">
+            <field name="name">Categories</field>
+            <field name="res_model">baseball.categories</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_categories" name="Categories"
+                  parent="menu_management"
+                  action="baseball_categories_list"/>
+
+
+
+        <record id="view_baseball_fee_tree" model="ir.ui.view">
+            <field name="name">baseball.fee.tree</field>
+            <field name="model">baseball.fee</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Fees" editable="bottom">
+                    <field name="fee"/>
+                    <field name="season_id"/>
+                    <field name="category_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="baseball_fee_list">
+            <field name="name">Cotisations</field>
+            <field name="res_model">baseball.fee</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="menu_fees" name="Fees"
+                  parent="menu_management"
+                  action="baseball_fee_list"/>
+
+	</data>
+</odoo>
+

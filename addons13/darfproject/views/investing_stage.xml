@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="investing_stage_form_view">
+			<field name="name">stage.of.investing</field>
+			<field name="model">stage.of.investing</field>
+			<field name="arch" type="xml">
+			<form>
+			<group>
+				<field name="name" />
+			</group>
+			</form>
+			</field>
+		</record>
+		<record model="ir.ui.view" id="investing_stage_tree_view">
+			<field name="name">stage.of.investing</field>
+			<field name="model">stage.of.investing</field>
+			<field name="arch" type="xml">
+			<tree>
+				<field name="name" />
+			</tree>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="investing_stage_action">
+			<field name="name">Stage of investment</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">stage.of.investing</field>
+<!--			<field name="view_type">form</field>-->
+			<field name="view_mode">tree,form,pivot,graph</field>
+			<field name="view_id" ref="darfproject.investing_stage_tree_view" />
+		</record>
+
+		<menuitem
+            id="area_investment_stage_manu"
+            name="Stage of Investment"
+            parent = "darfproject.project_estimate_menu"
+            action="investing_stage_action"
+            sequence="7"/>
+
+	</data>
+</odoo>

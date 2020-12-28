@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+	<record id="view_ir_ui_view_cache_test_graph" model="ir.ui.view">
+		<field name="name">ir.ui.view.cache.test.graph</field>
+		<field name="model">ir.ui.view.cache.test</field>
+		<field name="arch" type="xml">
+			<graph string="Invoices" type="bar" stacked="1">
+				<field name="access_time" />
+				<field name="generate_time" type="measure" />
+			</graph>
+		</field>
+	</record>
+
+
+	<record id="view_ir_ui_view_cache_test_search" model="ir.ui.view">
+		<field name="model">ir.ui.view.cache.test</field>
+		<field name="arch" type="xml">
+			<search string="Customized Views">
+				<field name="access_time" />
+				<field name="generate_time" />
+			</search>
+		</field>
+	</record>
+
+	<record id="action_ir_ui_view_cache_test" model="ir.actions.act_window">
+		<field name="name">View Cache Test</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">ir.ui.view.cache.test</field>
+		<field name="view_mode">graph</field>
+	</record>
+
+	<menuitem id="menu_action_ir_ui_view_cache_test" action="action_ir_ui_view_cache_test"
+		parent="base.menu_administration" sequence="999" />
+
+</odoo>

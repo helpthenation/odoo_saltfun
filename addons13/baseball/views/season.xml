@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+
+        <record id="view_baseball_season_tree" model="ir.ui.view">
+            <field name="name">baseball.season.tree</field>
+            <field name="model">baseball.season</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Seasons">
+                    <field name="sequence" widget="handle" />
+                    <field name="name"/>
+                    <field name="members_qty"/>
+                    <field name="amount_left_to_collect"/>
+                    <field name="is_current"/>
+                    <field name="certificate_id"/>
+
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_baseball_season_form" model="ir.ui.view">
+            <field name="name">baseball.season.tree</field>
+            <field name="model">baseball.season</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="set_as_current" type="object" string="Set as current" attrs="{'invisible': [('is_current','=',True)]}"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="members_qty"/>
+                                <field name="amount_left_to_collect"/>
+                            </group>
+                            <group>
+                                <field name="is_current" readonly="1"/>
+                                <field name="certificate_id" domain="[('public','=',True)]" context="{'default_public': True}"/>
+                                <field name="sequence"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Fees">
+                                <field name="fee_ids">
+                                    <tree string="Seasons">
+                                        <field name="category_id"/>
+                                        <field name="fee"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Description">
+                                <field name="registration_description"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="baseball_seasons">
+            <field name="name">Seasons</field>
+            <field name="res_model">baseball.season</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+        <menuitem id="menu_season_management" name="Seasons"
+                  parent="menu_management"
+                  action="baseball_seasons"
+                  sequence="10"
+                  />
+
+	</data>
+</odoo>
+

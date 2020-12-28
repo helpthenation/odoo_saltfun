@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_customer_investment_list,customer.investment.list,darfproject.model_customer_investment_list,base.group_portal,1,1,1,0
+access_customer_areas,area.of.investment,darfproject.model_area_of_investment,base.group_portal,1,1,1,1

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+
+        <record id="view_baseball_tournament_tree" model="ir.ui.view">
+            <field name="name">baseball.tournament.tree</field>
+            <field name="model">baseball.game</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+
+                <tree string="Games">
+                    <field name="start_time"/>
+                    <field name="end_time_tournament"/>
+                    <field name="division"/>
+                    <field name="home_team"/>
+                    <field name="venue"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_baseball_tournament_form" model="ir.ui.view">
+            <field name="name">baseball.game.form</field>
+            <field name="model">baseball.game</field>
+            <field name="arch" type="xml">
+
+                <form string="Tournament">
+                <sheet>
+                    <div class="oe_title oe_left">
+                        <h1>
+                            <field name="game_number" placeholder="Game number"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="game_type" invisible="1"/>
+                        <field name="start_time"/>
+                        <field name="end_time_tournament"/>
+                        <label for="home_team" string="Team"/>
+                        <field name="home_team" nolabel="1" domain="[('is_opponent','=',False)]"/>
+                        <field name="venue"/>
+                    </group>
+                    <group>
+                        <group >
+                            <label for="present_players_ids" string="Attendees"/>
+                            <newline/>
+                            <field name="present_players_ids" nolabel="1" >
+                                <tree>
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+                            <label for="absent_players_ids" string="Absentees"/>
+                            <newline/>
+                            <field name="absent_players_ids" nolabel="1" >
+                                <tree>
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </group>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+
+       <record id="view_tournament_filter" model="ir.ui.view">
+            <field name="name">baseball.game.search</field>
+            <field name="model">baseball.game</field>
+            <field name="arch" type="xml">
+                <search>
+                  <field name="start_time"/>
+                  <filter name="current" string="Current season" domain="[('game_type', '=', 'tournament'),('period', '=', 'current')]"/>
+                  <filter name="past" string="Past seasons" domain="[('game_type', '=', 'tournament'),('period', '=', 'past')]"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="baseball_list_tournaments">
+            <field name="name">Tournaments</field>
+            <field name="res_model">baseball.game</field>
+            <field name="view_mode">tree,form</field>
+            <!-- <field name="view_id" ref="view_baseball_tournament_tree"/> -->
+            <field name="search_view_id" ref="view_tournament_filter"/>
+            <field name="context">{'search_default_current':1, 'game_type':'tournament'}</field>
+            <field name="domain">[('game_type','=','tournament')]</field>
+            <field name="view_ids" eval="[
+                (5, 0, 0),
+                (0, 0, {
+                    'view_mode': 'tree',
+                    'view_id': ref('view_baseball_tournament_tree'),
+                    }),
+                (0, 0, {
+                    'view_mode': 'form',
+                    'view_id': ref('view_baseball_tournament_form'),
+                    }),
+                ]"/>
+        </record>
+
+
+
+        <menuitem id="menu_tounraments" name="Tournaments"
+                  parent="menu_competition"
+                  action="baseball_list_tournaments"/>
+
+    </data>
+</odoo>
+

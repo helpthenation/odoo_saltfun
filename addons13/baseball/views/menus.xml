@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+            
+        <menuitem id="main_baseball_menu" name="Baseball" sequence="1" groups="base.group_user" web_icon="baseball,static/img/icons/field.png"/>
+        <menuitem id="menu_management" name="Management" sequence="1" parent="main_baseball_menu"/>
+
+        <menuitem id="menu_uniforms" name="Uniforms" sequence="3" parent="main_baseball_menu" groups="group_uniforms_manage"/>
+
+        <menuitem id="menu_competition" name="Competition" sequence="2" parent="main_baseball_menu" groups="group_sports_manage"/>
+        <menuitem id="menu_others" name="Others" sequence="4" parent="main_baseball_menu"/>
+
+	</data>
+</odoo>
+
