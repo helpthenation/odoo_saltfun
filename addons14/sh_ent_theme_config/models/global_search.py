@@ -240,7 +240,7 @@ class GlobalSearchFields(models.Model):
     name = fields.Char("Label", related="field_id.field_description")
     model_id = fields.Many2one('ir.model',string='Model',ondelete='cascade')
     related_model_id = fields.Char(string='Relation With', related="field_id.relation")
-    ttype = fields.Selection(selection=FIELD_TYPES, string='Field Type', required=True,related="field_id.ttype")
+    ttype = fields.Selection(string='Field Type', required=True,related="field_id.ttype")
     field_ids = fields.One2many('o2m.global.search.fields','global_o2m_search_id', string='Fields')
     
     @api.onchange('field_id')
@@ -289,7 +289,7 @@ class O2MGlobalSearch(models.Model):
     global_o2m_search_id = fields.Many2one('global.search.fields', string='Global O2M Search')
     model_id = fields.Many2one('ir.model', string='Relation With')
     related_model_id = fields.Char(string='Relation With', related="field_id.relation")
-    ttype = fields.Selection(selection=FIELD_TYPES, string='Field Type', required=True,related="field_id.ttype")
+    ttype = fields.Selection(string='Field Type', required=True,related="field_id.ttype")
     
     @api.onchange('field_id')
     def _onchange_field_id(self):

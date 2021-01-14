@@ -80,3 +80,7 @@ INSERT INTO "public"."ir_attachment" ("id", "name", "description", "res_model", 
             }
         
     ', '1', '2020-12-19 20:24:53.71404', '1', '2020-12-19 20:24:53.71404', NULL);
+
+## 运行单元测试
+odoo14 -c /etc/odoo/odoo.conf -d test2 -i juhui_sale --log-level=test --test-enable --stop-after-init
+
