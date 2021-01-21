@@ -35,6 +35,7 @@ except ImportError:
 
 class ProjectReportButton(models.TransientModel):
     _name = 'wizard.project.report'
+    _description = '项目报告向导'
 
     partner_select = fields.Many2many('res.users', string='Assigned to')
     stage_select = fields.Many2many('project.task.type', string="Stage")

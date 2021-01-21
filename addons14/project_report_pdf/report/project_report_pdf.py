@@ -24,6 +24,7 @@ from odoo import models, api
 
 class ProjectReportParser(models.AbstractModel):
     _name = 'report.project_report_pdf.project_report_template'
+    _description = '项目PDF格式报告模板'
 
     def _get_report_values(self, docids, data=None):
         name = data['record']
