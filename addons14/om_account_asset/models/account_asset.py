@@ -22,7 +22,7 @@ class AccountAssetCategory(models.Model):
     account_depreciation_id = fields.Many2one('account.account', string='Depreciation Entries: Asset Account', required=True, domain=[('internal_type','=','other'), ('deprecated', '=', False)], help="Account used in the depreciation entries, to decrease the asset value.")
     account_depreciation_expense_id = fields.Many2one('account.account', string='Depreciation Entries: Expense Account', required=True, domain=[('internal_type','=','other'), ('deprecated', '=', False)], help="Account used in the periodical entries, to record a part of the asset as expense.")
     journal_id = fields.Many2one('account.journal', string='Journal', required=True)
-    company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env['res.company']._company_default_get('account.asset.category'))
+    company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company_id)
     method = fields.Selection([('linear', 'Linear'), ('degressive', 'Degressive')], string='Computation Method', required=True, default='linear',
         help="Choose the method to use to compute the amount of depreciation lines.\n"
             "  * Linear: Calculated on basis of: Gross Value / Number of Depreciations\n"
@@ -80,7 +80,7 @@ class AccountAssetAsset(models.Model):
     currency_id = fields.Many2one('res.currency', string='Currency', required=True, readonly=True, states={'draft': [('readonly', False)]},
         default=lambda self: self.env.user.company_id.currency_id.id)
     company_id = fields.Many2one('res.company', string='Company', required=True, readonly=True, states={'draft': [('readonly', False)]},
-        default=lambda self: self.env['res.company']._company_default_get('account.asset.asset'))
+        default=lambda self: self.env.company_id)
     note = fields.Text()
     category_id = fields.Many2one('account.asset.category', string='Category', required=True, change_default=True, readonly=True, states={'draft': [('readonly', False)]})
     date = fields.Date(string='Date', required=True, readonly=True, states={'draft': [('readonly', False)]}, default=fields.Date.context_today)

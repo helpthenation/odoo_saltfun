@@ -16,7 +16,7 @@ class AccountBudgetPost(models.Model):
     account_ids = fields.Many2many('account.account', 'account_budget_rel', 'budget_id', 'account_id', 'Accounts',
         domain=[('deprecated', '=', False)])
     company_id = fields.Many2one('res.company', 'Company', required=True,
-        default=lambda self: self.env['res.company']._company_default_get('account.budget.post'))
+        default=lambda self: self.env.company_id)
 
     def _check_account_ids(self, vals):
         # Raise an error to prevent the account.budget.post to have not specified account_ids.
@@ -58,7 +58,7 @@ class CrossoveredBudget(models.Model):
     crossovered_budget_line = fields.One2many('crossovered.budget.lines', 'crossovered_budget_id', 'Budget Lines',
         states={'done': [('readonly', True)]}, copy=True)
     company_id = fields.Many2one('res.company', 'Company', required=True,
-        default=lambda self: self.env['res.company']._company_default_get('account.budget.post'))
+        default=lambda self: self.env.company_id)
 
     
     def action_budget_confirm(self):
@@ -253,7 +253,7 @@ class CrossoveredBudgetLines(models.Model):
                 action['domain'] += [('general_account_id', 'in', self.general_budget_id.account_ids.ids)]
         else:
             # otherwise the journal entries booked on the accounts of the budgetary postition are opened
-            action = self.env['ir.actions.act_window'].for_xml_id('account', 'action_account_moves_all_a')
+            action = self.env['ir.actions.act_window']._for_xml_id('account.action_account_moves_all_a')
             action['domain'] = [('account_id', 'in',
                                  self.general_budget_id.account_ids.ids),
                                 ('date', '>=', self.date_from),

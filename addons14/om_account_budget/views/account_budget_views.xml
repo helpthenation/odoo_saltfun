@@ -112,8 +112,8 @@
                                     <field name="practical_amount" sum="Practical Amount"/>
                                     <field name="theoritical_amount" sum="Theoretical Amount"/>
                                     <field name="percentage"  widget="percentage" />
-                                    <button type="object" name="action_open_budget_entries" string="Entries..."
-                                            icon="fa-arrow-circle-o-right"/>
+<!--                                    <button type="object" name="action_open_budget_entries" string="Entries..."-->
+<!--                                            icon="fa-arrow-circle-o-right"/>-->
                                     <field name="is_above_budget" invisible="1"/>
                                 </tree>
                                 <form string="Budget Lines">

@@ -236,7 +236,7 @@ class ResCurrencyRateProvider(models.Model):
         value = direct
         if (
             currency_rate_inverted
-            and currency.with_context(force_company=self.company_id.id).rate_inverted
+            and currency.with_company(self.company_id).rate_inverted
         ):
             value = inverted
 
@@ -254,7 +254,7 @@ class ResCurrencyRateProvider(models.Model):
 
     @api.model
     def _default_company_id(self):
-        return self.env["res.company"]._company_default_get()
+        return self.env.company_id
 
     @api.model
     def _scheduled_update(self):
