@@ -1,1 +1,0 @@
-Base menu for Odoochain
