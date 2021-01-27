@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.module.category" id="module_management">
+             <field name="name">Marafik Berkane Management</field>
+             <field name="description">User access level for Marafik Berkane module</field>
+             <field name="sequence">20</field>
+        </record>
+         <record id="mb_user" model="res.groups">
+            <field name="name">Utilisateur</field>
+            <field name="category_id" ref="module_management"/>
+        </record>
+        <record id="mb_manager" model="res.groups">
+            <field name="name">Directeur</field>
+            <field name="category_id" ref="module_management"/>
+            <field name="implied_ids" eval="[(4, ref('mb_user'))]"/>
+        </record>
+        <record id="mb_control" model="res.groups">
+            <field name="name">Contrôle de Gestion</field>
+            <field name="category_id" ref="module_management"/>
+            <field name="implied_ids" eval="[(4, ref('mb_user'))]"/>
+        </record>
+    </data>
+</odoo>

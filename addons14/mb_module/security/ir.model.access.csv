@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+acce_devis,devis recu,model_mb_devisrecu,,1,1,1,1
+acce_devis_pv,pv devis recu,model_mb_pvvalidation,,1,1,1,1
+mb_bdcfournisseur_id,bdc fournisseur,model_mb_bdcfournisseur,,1,1,1,1
+mb_refused,mb refused,model_mb_refused,,1,1,1,1
+mb_bdcsignature,mb bdcsignature,model_mb_bdcsignature,,1,1,1,1
+mb_validate,mb validate,model_mb_validate,,1,1,1,1

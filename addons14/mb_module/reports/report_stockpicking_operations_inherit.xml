@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_picking_inherit" inherit_id="stock.report_delivery_document">
+        <xpath expr="//t[@t-set='o']" position="replace"></xpath>
+        <xpath expr="//t[@t-set='partner']" position="replace"></xpath>
+        <xpath expr="//t[@t-if='partner']" position="replace"></xpath>
+        <xpath expr="//h2" position="replace">
+            <table>
+                <tr>
+                    <td style="width:35%"></td>
+                    <td style="width:35%"></td>
+                    <td>
+                        <strong>Département de destination:</strong>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:35%"></td>
+                    <td style="width:35%"></td>
+                    <td>
+                        <p t-field="o.location_dest_id"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:35%"></td>
+                    <td style="width:35%"></td>
+                    <td>
+                        <strong>Responsable:</strong>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:35%"></td>
+                    <td style="width:35%"></td>
+                    <td>
+
+                        <t t-set="partner"
+                           t-value="o.partner_id or (o.move_lines and o.move_lines[0].partner_id) or False"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:35%"></td>
+                    <td style="width:35%"></td>
+                    <td>
+                        <p t-esc="partner"
+                           t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True}'/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h2>
+                            <span t-field="o.name"/>
+                        </h2>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </xpath>
+
+    </template>
+</odoo>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_purchaseorder_document_inherit" inherit_id="purchase.report_purchaseorder_document">
+        <xpath expr="//t[@t-set='address']" position="replace">
+            <t t-set="address">
+                <div t-field="o.partner_id"
+                     t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                <p t-if="o.partner_id.vat"><t t-esc="o.company_id.country_id.vat_label or 'ICE'"/>:
+                    <span t-field="o.partner_id.vat"/>
+                </p>
+            </t>
+        </xpath>
+        <xpath expr="//div[@id='informations']" position="replace">
+            <div id="informations" class="row mt32 mb32">
+                <div t-if="o.user_id" class="col bm-2">
+                    <strong>Responsable achat:</strong>
+                    <p t-field="o.user_id" class="m-0"/>
+                </div>
+                <div t-if="o.partner_ref" class="col bm-2">
+                    <strong>Votre référence de commande:</strong>
+                    <p t-field="o.partner_ref" class="m-0"/>
+                </div>
+                <div t-if="o.date_order" class="col bm-2">
+                    <strong>Date de commande:</strong>
+                    <p t-field="o.date_order" class="m-0"/>
+                </div>
+                <div t-if="o.business_unit" class="col bm-2">
+                    <strong>Business Unit Concernée:</strong>
+                    <p t-field="o.business_unit" class="m-0"/>
+                </div>
+                <div t-if="o.applicant" class="col bm-2">
+                    <strong>Demandeur:</strong>
+                    <p t-field="o.applicant" class="m-0"/>
+                </div>
+            </div>
+
+        </xpath>
+    </template>
+</odoo>

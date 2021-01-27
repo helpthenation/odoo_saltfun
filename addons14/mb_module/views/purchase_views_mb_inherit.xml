@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_views_inherit" model="ir.ui.view">
+        <field name="name">purchase.views.extend</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='requisition_id']" position="after">
+                <field name="business_unit"/>
+                <field name="applicant"/>
+            </xpath>
+
+            <xpath expr="//field[@name='state']" position="replace">
+                <field name="state" widget="statusbar" statusbar_visible="draft,sent,to approve,purchase"
+                       readonly="1"/>
+            </xpath>
+
+            <!--            <xpath expr="//button[@name='button_confirm' and @states='draft']" position="replace"/>-->
+
+            <xpath expr="//button[@id='bid_confirm' and @states='sent']" position="replace">-->
+                <button name="%(devis_recu)d" type="action" states="draft,sent" string="Devis Reçu"
+                        class="oe_highlight"/>
+            </xpath>
+
+            <xpath expr="//button[@name='button_approve']" position="replace">
+                <button name="button_approve" type="object" states='to approve' string="Devis Validé"
+                        class="oe_highlight"
+                        groups="purchase.group_purchase_manager"/>
+                <button name="%(validation_dg)d" type="action" states="purchase" string="Validation de la Direction"
+                        class="oe_highlight"/>
+            </xpath>
+            <xpath expr="//button[@name='button_cancel']" position="before">
+                <button name="%(mb_refused)d" type="action" string="Refuser" states="to approve"/>
+            </xpath>
+
+            <xpath expr="//button[@name='button_unlock']" position="replace">
+                <!--                <button name="button_unlock" type="object" string="Débloquer" states="done"-->
+                <!--                        groups="purchase.group_purchase_manager"/>-->
+            </xpath>
+
+            <xpath expr="//button[@name='confirm_reminder_mail']" position="replace"/>
+
+            <xpath expr="//button[@name='action_create_invoice'][1]" position="replace"/>
+
+            <xpath expr="//button[@name='action_create_invoice']" position="replace"/>
+
+            <xpath expr="//button[@name='button_done']" position="replace"/>
+
+            <xpath expr="//button[@name='action_rfq_send' and @states='purchase']" position="after">
+                <button name="%(mb_refused)d" type="action" string="Refuser" states="purchase"/>
+            </xpath>
+
+            <!--            <xpath expr="//button[@name='action_rfq_send' and @states='purchase']" position="replace">-->
+            <!--                <button name="button_done_mb" type="object" string="BDC Fournisseur" states="purchase"-->
+            <!--                        class="oe_highlight"/>-->
+            <!--            </xpath>-->
+
+            <!--            <xpath expr="//button[@name='button_unlock']" position="replace">-->
+            <!--                <button name="button_unlock" type="object" string="Débloquer" states="done"-->
+            <!--                        groups="purchase.group_purchase_manager"/>-->
+            <!--            </xpath>-->
+
+
+            <!--            <xpath expr="//button[@name='confirm_reminder_mail']" position="replace"/>-->
+
+
+            <!--            <xpath expr="//button[@name='action_rfq_send' and @states='sent']" position="replace"/>-->
+
+        </field>
+    </record>
+</odoo>

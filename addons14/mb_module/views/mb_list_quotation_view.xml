@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mb_devis_recu" model="ir.ui.view">
+            <field name="name">mb.devisrecu.form.extend</field>
+            <field name="model">mb.devisrecu</field>
+            <field name="arch" type="xml">
+                <tree string="Devis Reçu">
+                    <field name="devi_recu_note"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

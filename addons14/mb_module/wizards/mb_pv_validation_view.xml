@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mb_pvvaidation_form" model="ir.ui.view">
+        <field name="name">mb.pvvaidation.wizard</field>
+        <field name="model">mb.pvvalidation</field>
+        <field name="arch" type="xml">
+            <form string="Contrôle de Gestion">
+                <group>
+                    <field name="management_control"  />
+                    <field name="management_control_notes"/>
+                    <field name="management_control_validate" attrs="{'invisible': [('management_control_bloc','=',True)]}"/>
+                    <field name="management_control_bloc" attrs="{'invisible': [('management_control_validate','=',True)]}"/>
+                </group>
+                <footer>
+                    <button name="pv_validate" string="Validé" type="object" class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="pv_vaidation" model="ir.actions.act_window">
+        <field name="name">Contrôle de Gestion</field>
+        <field name="res_model">mb.pvvalidation</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="mb_pvvaidation_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

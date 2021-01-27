@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="dg_validation_form" model="ir.ui.view">
+        <field name="name">mb.bdcfournisseur.wizard</field>
+        <field name="model">mb.bdcfournisseur</field>
+        <field name="arch" type="xml">
+            <form string="Devis Reçu">
+                <group>
+                    <field name="gd_validation"/>
+                    <field name="gd_validation_validate" attrs="{'invisible': [('gd_validation_bloc','=',True)]}"/>
+                    <field name="gd_validation_bloc" attrs="{'invisible': [('gd_validation_validate','=',True)]}"/>
+                    <field name="gd_validation_note"/>
+                </group>
+                <footer>
+                    <button name="bdc_fournisseur_validatte" string="Validé" type="object" class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="validation_dg" model="ir.actions.act_window">
+        <field name="name">Confirmation de la Direction Générale</field>
+        <field name="res_model">mb.bdcfournisseur</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="dg_validation_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

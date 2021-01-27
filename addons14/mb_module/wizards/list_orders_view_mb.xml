@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_order_tree_mb" model="ir.ui.view">
+        <field name="name">purchase.order.tree.extend</field>
+        <field name="model">purchase.order</field>
+        <field name="arch" type="xml">
+            <tree string="Demande de Prix">
+                <field name="name" string="Référence" readonly="1"/>
+                <field name="partner_id" readonly="1" string="Fournisseur"/>
+                <field name="amount_total" sum="Total amount" widget="monetary" optional="show"/>
+                <field name="state" sum="Statut"/>
+                <button string="Valider" name="%(mb_validate)d" type="action" class="btn-primary" attrs="{'invisible':[('state', 'in', ('done'))]}"/>
+                <button string="Refuser" name="%(mb_refused)d" type="action" class="btn-danger" attrs="{'invisible':[('state', 'in', ('done'))]}" />
+            </tree>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="list_order_tree">
+        <field name="name">Demande de Prix</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="purchase_order_tree_mb"/>
+        <field name="domain">[('requisition_id','=',active_id)]</field>
+        <field name="context">{
+            "default_requisition_id":active_id,
+            "default_user_id": False,
+            }
+        </field>
+        <field name="target">new</field>
+    </record>
+</odoo>

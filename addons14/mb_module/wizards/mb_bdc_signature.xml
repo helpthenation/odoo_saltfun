@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bdc_signature_form" model="ir.ui.view">
+        <field name="name">mb.bdcsignature.wizard</field>
+        <field name="model">mb.bdcsignature</field>
+        <field name="arch" type="xml">
+            <form string="Signature de la direction">
+                <group>
+                    <field name="signature" widget="signature" placeholder="Signature"/>
+                </group>
+                <footer>
+                    <button name="bdc_signed" string="Validé" type="object" class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="bdc_signature" model="ir.actions.act_window">
+        <field name="name">Signature de la direction</field>
+        <field name="res_model">mb.bdcsignature</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="bdc_signature_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

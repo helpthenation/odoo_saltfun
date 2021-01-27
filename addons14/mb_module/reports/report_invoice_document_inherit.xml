@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="inherit_report_invoice_document" inherit_id="account.report_invoice_document">
+<!--        <xpath expr="//div[@class='mt16']" position="replace">-->
+<!--            <div t-if="o.partner_id.vat" class="mt16">-->
+<!--                <t t-if="o.company_id.country_id.vat_label" t-esc="o.company_id.country_id.vat_label"-->
+<!--                   id="inv_tax_id_label"/>-->
+<!--                <t t-else="">ICE</t>:-->
+<!--                <span t-field="o.partner_id.vat"/>-->
+<!--            </div>-->
+<!--        </xpath>-->
+        <xpath expr="//div[@id='informations']" position="replace">
+            <div id="informations" class="row mt32 mb32">
+                <div class="col mw-100 mb-2" t-if="o.invoice_date" name="invoice_date">
+                    <strong>Invoice Date:</strong>
+                    <p class="m-0" t-field="o.invoice_date"/>
+                </div>
+                <div class="col mw-100 mb-2"
+                     t-if="o.invoice_date_due and o.move_type == 'out_invoice' and o.state == 'posted'" name="due_date">
+                    <strong>Due Date:</strong>
+                    <p class="m-0" t-field="o.invoice_date_due"/>
+                </div>
+                <div class="col mw-100 mb-2" t-if="o.invoice_origin" name="origin">
+                    <strong>Source:</strong>
+                    <p class="m-0" t-field="o.invoice_origin"/>
+                </div>
+                <div class="col mw-100 mb-2" t-if="o.partner_id.ref" name="customer_code">
+                    <strong>Customer Code:</strong>
+                    <p class="m-0" t-field="o.partner_id.ref"/>
+                </div>
+                <div class="col mw-100 mb-2" t-if="o.ref" name="reference">
+                    <strong>Reference:</strong>
+                    <p class="m-0" t-field="o.ref"/>
+                </div>
+                <div class="col mw-100 mb-2" t-if="o.business_unit">
+                    <strong>Business Unit Concernée:</strong>
+                    <p class="m-0" t-field="o.business_unit"/>
+                </div>
+                <div class="col mw-100 mb-2" t-if="o.applicant">
+                    <strong>Demandeur:</strong>
+                    <p class="m-0" t-field="o.applicant"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
